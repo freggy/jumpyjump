@@ -51,4 +51,11 @@ public class JumpyJumpPlayer extends LabsPlayer {
         return Collections.unmodifiableCollection(this.checkpoints);
     }
 
+    /**
+     *
+     */
+    public void resetToCheckpoint() {
+        // TODO: play cool sound
+        this.player.teleport(this.getCurrentCheckPoint());
+    }
 }
