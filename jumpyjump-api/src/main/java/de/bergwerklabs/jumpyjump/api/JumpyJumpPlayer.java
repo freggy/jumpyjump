@@ -45,6 +45,13 @@ public class JumpyJumpPlayer extends LabsPlayer {
     }
 
     /**
+     *
+     */
+    public void next() {
+        this.checkpoints.poll();
+    }
+
+    /**
      * Gets a unmodifiable collection of all available checkpoints for this players jump course.
      */
     public Collection<Location> getCheckpoints() {

@@ -7,6 +7,7 @@ import de.bergwerklabs.jumpyjump.api.WinResult;
 /**
  * Created by Yannic Rieger on 03.04.2018.
  * <p>
+ * This event will be fired if a player wins the game by reaching the golden pressure plate.
  *
  * @author Yannic Rieger
  */

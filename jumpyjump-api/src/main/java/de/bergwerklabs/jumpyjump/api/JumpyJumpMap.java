@@ -1,54 +1,52 @@
 package de.bergwerklabs.jumpyjump.api;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
 /**
  * Created by Yannic Rieger on 02.04.2018.
  * <p>
+ * Data class that represents a JumpyJump map.
  *
  * @author Yannic Rieger
  */
 public class JumpyJumpMap {
 
     /**
-     *
+     * Gets the builders that built the map.
      */
     public Set<String> getBuilder() {
         return builder;
     }
 
     /**
-     *
+     * Gets the name of the map.
      */
     public String getName() {
         return name;
     }
 
     /**
-     *
+     * Gets the different courses of this map.
      */
     public Set<Course> getCourses() {
         return courses;
     }
 
     /**
-     *
+     * Gets the {@link Material}s that is used for checkpoint detection.
      */
     public Set<Material> getCheckpointMaterial() {
         return checkpointMaterial;
     }
 
     /**
-     *
+     * Gets the {@link Material}s where the player is allowed to step on.
      */
     public Set<Material> getAllowedBlocks() {
         return allowedBlocks;
@@ -61,11 +59,11 @@ public class JumpyJumpMap {
     private String name;
 
     /**
-     * @param builder
-     * @param courses
-     * @param checkpointMaterial
-     * @param allowedBlocks
-     * @param name
+     * @param builder            the builders that built the map.
+     * @param courses            the {@link Material}s where the player is allowed to step on.
+     * @param checkpointMaterial the {@link Material} that is used for checkpoint detection.
+     * @param allowedBlocks      the {@link Material}s where the player is allowed to step on.
+     * @param name               the name of the map.
      */
     public JumpyJumpMap(
             @NotNull Set<String> builder,
@@ -82,9 +80,10 @@ public class JumpyJumpMap {
     }
 
     /**
+     * Creates a {@code JumpyJumpMap} from JSON.
      *
-     * @param object
-     * @return
+     * @param object {@link JsonObject} representing a {@code JumpyJumpMap}.
+     * @return a {@code JumpyJumpMap}
      */
     public static JumpyJumpMap fromJson(@NotNull JsonObject object) {
         Preconditions.checkNotNull(object);
@@ -111,16 +110,5 @@ public class JumpyJumpMap {
         });
 
         return new JumpyJumpMap(builders, courses, checkpointMaterial, allowedBlocks, name);
-    }
-
-    /**
-     *
-     * @param array
-     * @param consumer
-     */
-    private static void processArray(JsonArray array, Consumer<JsonElement> consumer) {
-        for (JsonElement element : array) {
-            consumer.accept(element);
-        }
     }
 }

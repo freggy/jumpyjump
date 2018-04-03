@@ -1,6 +1,8 @@
 package de.bergwerklabs.jumpyjump.core.listener;
 
 import de.bergwerklabs.jumpyjump.api.JumpyJumpMap;
+import de.bergwerklabs.jumpyjump.core.JumpyJump;
+import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
 import org.bukkit.event.Listener;
 
 /**
@@ -12,8 +14,10 @@ import org.bukkit.event.Listener;
 public class JumpyJumpListener implements Listener {
 
     protected JumpyJumpMap map;
+    protected JumpyJump game;
 
-    public JumpyJumpListener(JumpyJumpMap map) {
-        this.map = map;
+    JumpyJumpListener(JumpyJumpSession session) {
+        this.map = session.getMapManager().getMap();
+        this.game = (JumpyJump) session.getGame();
     }
 }

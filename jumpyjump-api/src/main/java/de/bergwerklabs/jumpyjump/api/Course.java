@@ -12,15 +12,22 @@ import java.util.Set;
 /**
  * Created by Yannic Rieger on 02.04.2018.
  * <p>
+ * Contains data for a players jump and run course.
  *
  * @author Yannic Rieger
  */
 public class Course {
 
+    /**
+     * Gets the checkpoints for this course.
+     */
     public Set<Location> getCheckpoints() {
         return checkpoints;
     }
 
+    /**
+     * Gets the spawn for this course.
+     */
     public Location getSpawn() {
         return spawn;
     }
@@ -28,11 +35,21 @@ public class Course {
     private Set<Location> checkpoints;
     private Location spawn;
 
+    /**
+     * @param checkpoints
+     * @param spawn
+     */
     public Course(Set<Location> checkpoints, Location spawn) {
         this.checkpoints = checkpoints;
         this.spawn = spawn;
     }
 
+    /**
+     * Creates an {@code Course} from JSON.
+     *
+     * @param object {@link JsonObject} representing a {@code Course}.
+     * @return the {@code Course}
+     */
     public static Course fromJson(JsonObject object) {
         Location spawn = locationFromJson(object.get("spawn").getAsJsonObject());
         Set<Location> checkpoints = new HashSet<>();

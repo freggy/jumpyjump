@@ -9,6 +9,7 @@ import java.util.UUID;
 /**
  * Created by Yannic Rieger on 02.04.2018.
  * <p>
+ * Main class for the JumpyJump game.
  *
  * @author Yannic Rieger
  */
@@ -18,6 +19,9 @@ public class JumpyJumpSession extends MinigameSession<JumpyJumpPlayer> {
         return instance;
     }
 
+    /**
+     * Gets the {@link MapManager}.
+     */
     public MapManager getMapManager() {
         return mapManager;
     }
@@ -35,6 +39,11 @@ public class JumpyJumpSession extends MinigameSession<JumpyJumpPlayer> {
         mapManager.loadMap();
     }
 
+    /**
+     * Gets a {@link JumpyJumpPlayer} based on their {@link UUID}
+     *
+     * @param uuid {@link UUID} of the player.
+     */
     public JumpyJumpPlayer getPlayer(UUID uuid) {
         return (JumpyJumpPlayer)this.getGame().getPlayerRegistry().getPlayer(uuid);
     }

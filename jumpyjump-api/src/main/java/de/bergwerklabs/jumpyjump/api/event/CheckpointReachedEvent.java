@@ -7,6 +7,7 @@ import org.bukkit.Location;
 /**
  * Created by Yannic Rieger on 03.04.2018.
  * <p>
+ * This event will be fired when a player reaches a checkpoint.
  *
  * @author Yannic Rieger
  */
