@@ -5,8 +5,6 @@ import de.bergwerklabs.framework.bedrock.api.PlayerRegistry;
 import de.bergwerklabs.framework.bedrock.api.event.session.SessionDonePreparationEvent;
 import de.bergwerklabs.framework.bedrock.api.session.MinigameSession;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
-import de.bergwerklabs.jumpyjump.core.listener.PlayerInteractListener;
-import de.bergwerklabs.jumpyjump.core.listener.PlayerMoveListener;
 import org.bukkit.Bukkit;
 
 import java.util.UUID;
@@ -35,6 +33,20 @@ public class JumpyJumpSession extends MinigameSession<JumpyJumpPlayer> {
         return new JumpyJump();
     }
 
+    /**
+     *
+     */
+    public PlayerRegistry<JumpyJumpPlayer> getRegistry() {
+        return registry;
+    }
+
+    /**
+     *
+     * @param registry
+     */
+    public void setRegistry(PlayerRegistry<JumpyJumpPlayer> registry) {
+        this.registry = registry;
+    }
 
     private static JumpyJumpSession instance;
     private PlayerRegistry<JumpyJumpPlayer> registry;
@@ -54,13 +66,5 @@ public class JumpyJumpSession extends MinigameSession<JumpyJumpPlayer> {
      */
     public JumpyJumpPlayer getPlayer(UUID uuid) {
         return this.registry.getPlayer(uuid);
-    }
-
-    public PlayerRegistry<JumpyJumpPlayer> getRegistry() {
-        return registry;
-    }
-
-    public void setRegistry(PlayerRegistry<JumpyJumpPlayer> registry) {
-        this.registry = registry;
     }
 }

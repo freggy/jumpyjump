@@ -11,13 +11,15 @@ import org.bukkit.event.Listener;
  *
  * @author Yannic Rieger
  */
-public class JumpyJumpListener implements Listener {
+class JumpyJumpListener implements Listener {
 
     protected JumpyJumpMap map;
     protected JumpyJump game;
+    protected JumpyJumpSession session;
 
-    public JumpyJumpListener(JumpyJumpSession session) {
+    JumpyJumpListener(JumpyJumpSession session) {
         this.map = session.getMapManager().getMap();
         this.game = (JumpyJump) session.getGame();
+        this.session = session;
     }
 }

@@ -68,7 +68,7 @@ public class MapManager {
         World world = wc.createWorld();
         world.setAutoSave(false);
         world.setPVP(false);
-        world.setDifficulty(Difficulty.NORMAL);
+        world.setDifficulty(Difficulty.PEACEFUL);
         world.setGameRuleValue("doDaylightCycle", "false");
         world.setGameRuleValue("mobGriefing", "false");
         world.setGameRuleValue("doMobSpawning", "false");

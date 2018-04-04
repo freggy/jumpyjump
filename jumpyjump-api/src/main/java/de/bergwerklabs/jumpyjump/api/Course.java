@@ -23,8 +23,10 @@ public class Course {
     /**
      * Gets the checkpoints for this course.
      */
-    public Map<Vector, Location> getCheckpoints() {
-        return checkpoints;
+    public Location getCheckpoint(Vector vector) {
+        this.checkpoints.keySet().forEach(System.out::println);
+        System.out.println(vector.toString());
+        return this.checkpoints.get(vector.toString());
     }
 
     /**
@@ -34,14 +36,14 @@ public class Course {
         return spawn;
     }
 
-    private Map<Vector, Location> checkpoints;
+    private Map<String, Location> checkpoints;
     private Location spawn;
 
     /**
      * @param checkpoints
      * @param spawn
      */
-    public Course(Map<Vector, Location> checkpoints, Location spawn) {
+    public Course(Map<String, Location> checkpoints, Location spawn) {
         this.checkpoints = checkpoints;
         this.spawn = spawn;
     }
@@ -54,10 +56,10 @@ public class Course {
      */
     public static Course fromJson(JsonObject object) {
         Location spawn = locationFromJson(object.get("spawn").getAsJsonObject());
-        Map<Vector, Location> checkpoints = new HashMap<>();
+        Map<String, Location> checkpoints = new HashMap<>();
         object.get("checkpoints").getAsJsonArray().forEach(element -> {
             Location location = locationFromJson(element.getAsJsonObject());
-            checkpoints.put(location.toVector(), location);
+            checkpoints.put(location.toVector().toString(), location);
         });
         return new Course(checkpoints, spawn);
     }

@@ -1,7 +1,10 @@
 package de.bergwerklabs.jumpyjump.api;
 
 import de.bergwerklabs.framework.bedrock.api.LabsPlayer;
+import de.bergwerklabs.framework.commons.spigot.particle.ParticleUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 /**
@@ -41,10 +44,10 @@ public class JumpyJumpPlayer extends LabsPlayer {
      * Teleports the player to the current checkpoint.
      */
     public void resetToCheckpoint() {
-        // TODO: play cool sound
+        final Player player = this.getPlayer();
         if (this.currentCheckpoint == null) {
-            this.getPlayer().teleport(this.course.getSpawn().clone().add(0.5, 0.5, 0.5));
+            player.teleport(this.course.getSpawn().clone().add(0.5, 0.5, 0.5));
         }
-        else this.getPlayer().teleport(this.currentCheckpoint.clone().add(0.5, 0.5, 0.5));
+        else player.teleport(this.currentCheckpoint.clone().add(0.5, 0.5, 0.5));
     }
 }

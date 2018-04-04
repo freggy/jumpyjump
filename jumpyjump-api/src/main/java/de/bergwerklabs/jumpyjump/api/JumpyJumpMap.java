@@ -57,6 +57,7 @@ public class JumpyJumpMap {
     private Set<Material> checkpointMaterial;
     private Set<Material> allowedBlocks;
     private String name;
+    private boolean isMirror;
 
     /**
      * @param builder            the builders that built the map.
@@ -65,18 +66,20 @@ public class JumpyJumpMap {
      * @param allowedBlocks      the {@link Material}s where the player is allowed to step on.
      * @param name               the name of the map.
      */
-    public JumpyJumpMap(
+    private JumpyJumpMap(
             @NotNull Set<String> builder,
             @NotNull Set<Course> courses,
             @NotNull Set<Material> checkpointMaterial,
             @NotNull Set<Material> allowedBlocks,
-            @NotNull String name
+            @NotNull String name,
+            boolean isMirror
     ) {
         this.builder = builder;
         this.name = name;
         this.courses = courses;
         this.checkpointMaterial = checkpointMaterial;
         this.allowedBlocks = allowedBlocks;
+        this.isMirror = isMirror;
     }
 
     /**
@@ -88,6 +91,7 @@ public class JumpyJumpMap {
     public static JumpyJumpMap fromJson(@NotNull JsonObject object) {
         Preconditions.checkNotNull(object);
         String name = object.get("name").getAsString();
+        boolean isMirror = object.get("mirror").getAsBoolean();
         Set<String> builders = new HashSet<>();
         Set<Course> courses = new HashSet<>();
         Set<Material> checkpointMaterial = new HashSet<>();
@@ -109,6 +113,6 @@ public class JumpyJumpMap {
             allowedBlocks.add(Material.getMaterial(element.getAsString()));
         });
 
-        return new JumpyJumpMap(builders, courses, checkpointMaterial, allowedBlocks, name);
+        return new JumpyJumpMap(builders, courses, checkpointMaterial, allowedBlocks, name, isMirror);
     }
 }
