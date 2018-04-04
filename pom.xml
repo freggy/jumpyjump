@@ -13,6 +13,17 @@
         <module>jumpyjump-api</module>
         <module>jumpyjumpy-lobby</module>
     </modules>
-
-
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <repositories>
+        <repository>
+            <id>labs_nexus</id>
+            <url>http://devs.bergwerklabs.de:8081/repository/maven-snapshots/</url>
+        </repository>
+        <repository>
+            <id>labs_nexus_releases</id>
+            <url>http://devs.bergwerklabs.de:8081/repository/maven-releases/</url>
+        </repository>
+    </repositories>
 </project>

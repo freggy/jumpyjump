@@ -2,12 +2,16 @@ package de.bergwerklabs.jumpyjump.core;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpMap;
+import org.apache.commons.io.FileUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.plugin.Plugin;
 
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Created by Yannic Rieger on 03.04.2018.
@@ -25,22 +29,14 @@ public class MapManager {
 
     private String mapName;
     private JumpyJumpMap map;
+    private Plugin plugin;
 
     /**
      * @param plugin the {@link JumpyJumpSession}
      */
     MapManager(Plugin plugin) {
-        this.mapName = System.getenv("WORLD");
-
-        try {
-            final JsonParser parser = new JsonParser();
-            final FileReader reader = new FileReader(plugin.getDataFolder() + "/maps/" + this.mapName + "/config.json");
-            final JsonElement element = parser.parse(reader);
-            this.map = JumpyJumpMap.fromJson(element.getAsJsonObject());
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        this.mapName = "sj-1";//System.getenv("WORLD");
+        this.plugin = plugin;
     }
 
     /**
@@ -59,11 +55,20 @@ public class MapManager {
      * </ul>
      */
     public void loadMap() {
-        WorldCreator creator = new WorldCreator(this.mapName);
-        World world = creator.createWorld();
+
+        try {
+            new File(this.mapName).mkdir();
+            FileUtils.copyDirectory(new File(this.plugin.getDataFolder() + "/maps/" + this.mapName), new File(this.mapName));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        WorldCreator wc = new WorldCreator(this.mapName);
+        World world = wc.createWorld();
         world.setAutoSave(false);
         world.setPVP(false);
-        world.setDifficulty(Difficulty.PEACEFUL);
+        world.setDifficulty(Difficulty.NORMAL);
         world.setGameRuleValue("doDaylightCycle", "false");
         world.setGameRuleValue("mobGriefing", "false");
         world.setGameRuleValue("doMobSpawning", "false");
@@ -71,5 +76,15 @@ public class MapManager {
         world.setGameRuleValue("keepInventory", "true");
         world.setGameRuleValue("commandBlockOutput", "false");
         world.setSpawnFlags(false, false);
+
+        try {
+            final JsonParser parser = new JsonParser();
+            final FileReader reader = new FileReader(this.plugin.getDataFolder() + "/maps/" + this.mapName + "/config.json");
+            final JsonElement element = parser.parse(reader);
+            this.map = JumpyJumpMap.fromJson(element.getAsJsonObject());
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

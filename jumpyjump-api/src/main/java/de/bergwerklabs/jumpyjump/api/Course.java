@@ -6,8 +6,10 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 /**
  * Created by Yannic Rieger on 02.04.2018.
@@ -21,7 +23,7 @@ public class Course {
     /**
      * Gets the checkpoints for this course.
      */
-    public Set<Location> getCheckpoints() {
+    public Map<Vector, Location> getCheckpoints() {
         return checkpoints;
     }
 
@@ -32,14 +34,14 @@ public class Course {
         return spawn;
     }
 
-    private Set<Location> checkpoints;
+    private Map<Vector, Location> checkpoints;
     private Location spawn;
 
     /**
      * @param checkpoints
      * @param spawn
      */
-    public Course(Set<Location> checkpoints, Location spawn) {
+    public Course(Map<Vector, Location> checkpoints, Location spawn) {
         this.checkpoints = checkpoints;
         this.spawn = spawn;
     }
@@ -52,9 +54,10 @@ public class Course {
      */
     public static Course fromJson(JsonObject object) {
         Location spawn = locationFromJson(object.get("spawn").getAsJsonObject());
-        Set<Location> checkpoints = new HashSet<>();
+        Map<Vector, Location> checkpoints = new HashMap<>();
         object.get("checkpoints").getAsJsonArray().forEach(element -> {
-            checkpoints.add(locationFromJson(element.getAsJsonObject()));
+            Location location = locationFromJson(element.getAsJsonObject());
+            checkpoints.put(location.toVector(), location);
         });
         return new Course(checkpoints, spawn);
     }

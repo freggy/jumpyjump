@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
  */
 public class PlayerMoveListener extends JumpyJumpListener {
 
-    PlayerMoveListener(JumpyJumpSession session) {
+    public PlayerMoveListener(JumpyJumpSession session) {
         super(session);
     }
 

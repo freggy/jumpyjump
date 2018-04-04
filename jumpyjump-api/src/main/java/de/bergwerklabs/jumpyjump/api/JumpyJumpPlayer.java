@@ -4,8 +4,6 @@ import de.bergwerklabs.framework.bedrock.api.LabsPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.*;
-
 /**
  * Created by Yannic Rieger on 02.04.2018.
  * <p>
@@ -15,54 +13,38 @@ import java.util.*;
  */
 public class JumpyJumpPlayer extends LabsPlayer {
 
-    private Queue<Location> checkpoints = new LinkedList<Location>();
+
+    public Location getCurrentCheckpoint() {
+        return currentCheckpoint;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public void setCurrentCheckpoint(Location currentCheckpoint) {
+        this.currentCheckpoint = currentCheckpoint;
+    }
+
+    private Course course;
+    private Location currentCheckpoint;
 
     public JumpyJumpPlayer(Player player) {
-        super(player);
+        super(player.getUniqueId());
     }
 
     /**
-     * Adds the checkpoints to the {@link Queue}.
-     *
-     * @param checkpoints {@link Queue} containing checkpoints.
-     */
-    public void addCheckpoints(Queue<Location> checkpoints) {
-        this.checkpoints.addAll(checkpoints);
-    }
-
-    /**
-     * Gets the current checkpoint the user is at.
-     */
-    public Location getCurrentCheckPoint() {
-        return this.checkpoints.element();
-    }
-
-    /**
-     * Gets the next checkpoint.
-     */
-    public Location getNextCheckpoint() {
-        return this.checkpoints.peek();
-    }
-
-    /**
-     *
-     */
-    public void next() {
-        this.checkpoints.poll();
-    }
-
-    /**
-     * Gets a unmodifiable collection of all available checkpoints for this players jump course.
-     */
-    public Collection<Location> getCheckpoints() {
-        return Collections.unmodifiableCollection(this.checkpoints);
-    }
-
-    /**
-     *
+     * Teleports the player to the current checkpoint.
      */
     public void resetToCheckpoint() {
         // TODO: play cool sound
-        this.player.teleport(this.getCurrentCheckPoint());
+        if (this.currentCheckpoint == null) {
+            this.getPlayer().teleport(this.course.getSpawn().clone().add(0.5, 0.5, 0.5));
+        }
+        else this.getPlayer().teleport(this.currentCheckpoint.clone().add(0.5, 0.5, 0.5));
     }
 }
