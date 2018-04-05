@@ -1,5 +1,6 @@
 package de.bergwerklabs.jumpyjump.core.listener;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +20,8 @@ public class PlayerJoinListener implements Listener {
         player.setLevel(0);
         player.setExp(0);
         player.getInventory().clear();
+        player.setWalkSpeed(0.2F);
+        player.setGameMode(GameMode.ADVENTURE);
     }
 
 }

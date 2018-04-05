@@ -3,7 +3,9 @@ package de.bergwerklabs.jumpyjump.core;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.google.common.collect.Iterators;
 import de.bergwerklabs.framework.bedrock.api.LabsGame;
+import de.bergwerklabs.framework.bedrock.api.LabsPlayer;
 import de.bergwerklabs.framework.bedrock.api.PlayerRegistry;
+import de.bergwerklabs.framework.commons.spigot.general.BossBar;
 import de.bergwerklabs.framework.commons.spigot.general.timer.LabsTimer;
 import de.bergwerklabs.framework.commons.spigot.nms.packet.v1_8.WrapperPlayServerCustomSoundEffect;
 import de.bergwerklabs.framework.commons.spigot.nms.packet.v1_8.WrapperPlayServerNamedSoundEffect;
@@ -14,11 +16,13 @@ import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
 import de.bergwerklabs.jumpyjump.core.listener.PlayerDamageListener;
 import de.bergwerklabs.jumpyjump.core.listener.PlayerInteractListener;
 import de.bergwerklabs.jumpyjump.core.listener.PlayerMoveListener;
+import de.bergwerklabs.jumpyjump.core.listener.timer.CountdownStopListener;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
@@ -49,10 +53,11 @@ public class JumpyJump extends LabsGame<JumpyJumpPlayer> {
         this.startTime = System.currentTimeMillis();
         final JumpyJumpMap map = JumpyJumpSession.getInstance().getMapManager().getMap();
         final Iterator<Course> courses = JumpyJumpSession.getInstance().getMapManager().getMap().getCourses().iterator();
+        final Collection<JumpyJumpPlayer> players = registry.getPlayers().values();
+
         this.registerListeners();
 
-        registry.getPlayers().values().forEach(player -> {
-
+        players.forEach(player -> {
             Bukkit.getOnlinePlayers().forEach(p -> {
                 if (!p.getUniqueId().equals(player.getUuid())) {
                     player.getPlayer().hidePlayer(p);
@@ -67,10 +72,9 @@ public class JumpyJump extends LabsGame<JumpyJumpPlayer> {
             }
         });
 
-
         Bukkit.getScheduler().runTaskLater(JumpyJumpSession.getInstance(), () -> {
-            registry.getPlayers().values().forEach(jumpPlayer -> {
-                this.createAndSendTitle(
+            players.forEach(jumpPlayer -> {
+                Common.createAndSendTitle(
                         jumpPlayer.getPlayer(),
                         "§e" + map.getName(),
                         "§b" + StringUtils.join(map.getBuilder(), ", ")
@@ -79,25 +83,16 @@ public class JumpyJump extends LabsGame<JumpyJumpPlayer> {
         }, 10);
 
         Bukkit.getScheduler().runTaskLater(JumpyJumpSession.getInstance(), () -> {
-            Iterator<String> iterator = Iterators.cycle("Auf die Plätze...", "Fertig...");
+            Iterator<String> iterator = Iterators.cycle("§6Auf die Plätze...", "§eFertig...");
             LabsTimer timer = new LabsTimer(2, (timeLeft) -> {
-                registry.getPlayers().values().forEach(player -> {
+                players.forEach(player -> {
                     final Player playerObject = player.getPlayer();
-                    this.createAndSendTitle(playerObject, "§a" + iterator.next(), "");
+                    Common.createAndSendTitle(playerObject, iterator.next(), "");
                     playerObject.playSound(playerObject.getEyeLocation(), Sound.ORB_PICKUP, 100, 1);
                 });
             });
 
-            timer.addStopListener(event -> {
-                registry.getPlayers().values().forEach(player -> {
-                    final Player playerObject = player.getPlayer();
-                    player.unfreeze();
-                    playerObject.playSound(playerObject.getEyeLocation(), Sound.COW_HURT, 100, 1);
-                    this.createAndSendTitle(playerObject, "§bLOS!", "");
-                });
-                Bukkit.getScheduler().runTaskTimerAsynchronously(JumpyJumpSession.getInstance(), this.displayFailsTask, 0L, 20L);
-            });
-
+            timer.addStopListener(new CountdownStopListener(JumpyJumpSession.getInstance()));
             timer.start();
         }, 20 * 2);
     }
@@ -110,9 +105,5 @@ public class JumpyJump extends LabsGame<JumpyJumpPlayer> {
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(JumpyJumpSession.getInstance()), JumpyJumpSession.getInstance());
         Bukkit.getPluginManager().registerEvents(new PlayerMoveListener(JumpyJumpSession.getInstance()), JumpyJumpSession.getInstance());
         Bukkit.getPluginManager().registerEvents(new PlayerDamageListener(), JumpyJumpSession.getInstance());
-    }
-
-    private void createAndSendTitle(Player player, String title, String subtitle) {
-        new Title(title, subtitle, 4, 4, 40).display(player);
     }
 }
