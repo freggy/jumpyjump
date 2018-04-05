@@ -18,12 +18,14 @@ public class JumpyJumpPlayer extends LabsPlayer {
 
 
     public Location getCurrentCheckpoint() {
-        return currentCheckpoint;
+        return this.currentCheckpoint == null ? this.course.getSpawn() : this.currentCheckpoint;
     }
 
     public Course getCourse() {
         return course;
     }
+
+    public int getFails() { return fails; }
 
     public void setCourse(Course course) {
         this.course = course;
@@ -35,6 +37,7 @@ public class JumpyJumpPlayer extends LabsPlayer {
 
     private Course course;
     private Location currentCheckpoint;
+    private int fails;
 
     public JumpyJumpPlayer(Player player) {
         super(player.getUniqueId());
@@ -44,6 +47,7 @@ public class JumpyJumpPlayer extends LabsPlayer {
      * Teleports the player to the current checkpoint.
      */
     public void resetToCheckpoint() {
+        fails++;
         final Player player = this.getPlayer();
         if (this.currentCheckpoint == null) {
             player.teleport(this.course.getSpawn().clone().add(0.5, 0.5, 0.5));

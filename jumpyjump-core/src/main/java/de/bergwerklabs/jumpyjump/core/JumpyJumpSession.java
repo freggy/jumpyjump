@@ -5,6 +5,7 @@ import de.bergwerklabs.framework.bedrock.api.PlayerRegistry;
 import de.bergwerklabs.framework.bedrock.api.event.session.SessionDonePreparationEvent;
 import de.bergwerklabs.framework.bedrock.api.session.MinigameSession;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
+import de.bergwerklabs.jumpyjump.core.listener.PlayerJoinListener;
 import org.bukkit.Bukkit;
 
 import java.util.UUID;
@@ -57,6 +58,7 @@ public class JumpyJumpSession extends MinigameSession<JumpyJumpPlayer> {
         this.mapManager = new MapManager(this);
         this.mapManager.loadMap();
         Bukkit.getPluginManager().callEvent(new SessionDonePreparationEvent(this));
+        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
     }
 
     /**
