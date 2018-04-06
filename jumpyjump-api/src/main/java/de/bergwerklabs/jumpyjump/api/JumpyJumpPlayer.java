@@ -60,7 +60,7 @@ public class JumpyJumpPlayer extends LabsPlayer {
     public void setGoalProgress(float percentage) {
         final Player player = this.getPlayer();
         final Scoreboard scoreboard = player.getScoreboard();
-        if (scoreboard == null) return;
+        if (scoreboard == null || scoreboard.getObjective("distance") == null) return;
         scoreboard.getObjective("distance").getScore("§7" + player.getDisplayName()).setScore(Math.round(percentage));
     }
 }

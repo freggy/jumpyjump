@@ -17,10 +17,11 @@ import java.util.Queue;
 public class Course {
 
     /**
-     * Gets the checkpoints for this course.
+     * Gets the checkpoints for this course. If all checkpoints have been reached,
+     * the returned {@link Location} is the end of the course.
      */
     public Location inspectNextCheckpoint() {
-        return this.checkpoints.peek();
+        return this.checkpoints.peek() == null ? this.end : this.checkpoints.peek();
     }
 
     public Location pollNextCheckpoint() {

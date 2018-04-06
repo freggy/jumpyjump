@@ -74,7 +74,7 @@ public class JumpyJump extends LabsGame<JumpyJumpPlayer> {
             players.forEach(jumpPlayer -> {
                 Common.createAndSendTitle(
                         jumpPlayer.getPlayer(),
-                        "§e" + map.getName(),
+                        map.getDifficulty().getColor() + map.getName(),
                         "§b" + StringUtils.join(map.getBuilder(), ", ")
                 );
             });

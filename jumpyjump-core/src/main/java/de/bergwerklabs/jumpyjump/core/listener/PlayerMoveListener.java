@@ -30,18 +30,14 @@ public class PlayerMoveListener extends JumpyJumpListener {
         final Material ground = event.getTo().getBlock().getRelative(BlockFace.DOWN).getType();
 
         final Location nextCheckpoint = jumpyJumpPlayer.getCourse().inspectNextCheckpoint().clone().add(0.5, 0, 0.5);
-        final Location spawnPoint = jumpyJumpPlayer.getCurrentCheckpoint().clone().add(0.5, 0, 0.5);
+        final Location currentCheckpoint = jumpyJumpPlayer.getCurrentCheckpoint().clone().add(0.5, 0, 0.5);
 
-        /*
-
-
-
-        float totalDistance = (float)this.calculateDistanceFast(spawnPoint, nextCheckpoint);
-        float currentDistance = (float)this.calculateDistanceFast(player.getLocation(), nextCheckpoint);
-        float wayPercentage = (currentDistance / totalDistance) * 100; */
-
-        float checkpointPerc = this.calculateWayPercentage(spawnPoint, nextCheckpoint, player.getLocation());
-        float goalPerc = this.calculateWayPercentage(spawnPoint, course.getEnd().clone().add(0.5, 0, 0.5), player.getLocation());
+        float checkpointPerc = this.calculateWayPercentage(currentCheckpoint, nextCheckpoint, player.getLocation());
+        float goalPerc = this.calculateWayPercentage(
+                course.getSpawn().clone().add(0.5, 0, 0.5),
+                course.getEnd().clone().add(0.5, 0, 0.5),
+                player.getLocation()
+        );
 
         jumpyJumpPlayer.setCheckpointProgress(1 - (checkpointPerc / 100));
         jumpyJumpPlayer.setGoalProgress(100 - goalPerc);

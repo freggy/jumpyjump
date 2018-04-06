@@ -89,6 +89,7 @@ public class JumpyJumpMap {
         this.courses = courses;
         this.checkpointMaterial = checkpointMaterial;
         this.allowedBlocks = allowedBlocks;
+        this.difficulty = difficulty;
         this.isMirror = isMirror;
     }
 

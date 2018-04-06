@@ -92,7 +92,8 @@ public class PlayerInteractListener extends JumpyJumpListener {
                 });
                 Bukkit.getPluginManager().callEvent(new CheckpointReachedEvent(jumpyJumpPlayer, this.map, checkpoint));
             }
-            else if (material == Material.GOLD_PLATE) {
+
+            if (material == Material.GOLD_PLATE) {
                 WinResult result = new WinResult(System.currentTimeMillis() - this.game.getStartTime());
                 Bukkit.getPluginManager().callEvent(new JumpyJumpWinEvent(jumpyJumpPlayer, this.map, result));
                 this.game.stop();
