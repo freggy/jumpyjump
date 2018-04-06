@@ -1,9 +1,9 @@
-package de.bergwerklabs.jumpyjump.core.listener.timer;
+package de.bergwerklabs.jumpyjump.lobby.core.listener.timer;
 
 import de.bergwerklabs.framework.commons.spigot.general.timer.event.LabsTimerStopEvent;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
-import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
-import de.bergwerklabs.jumpyjump.core.listener.JumpyJumpListener;
+import de.bergwerklabs.jumpyjump.lobby.core.JumpyJumpSession;
+import de.bergwerklabs.jumpyjump.lobby.core.listener.JumpyJumpListener;
 
 import java.util.Collection;
 import java.util.function.Consumer;

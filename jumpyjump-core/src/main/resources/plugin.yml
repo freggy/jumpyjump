@@ -1,5 +1,5 @@
 name: JumpyJump
 author: freggy
 version: 1.0
-main: de.bergwerklabs.jumpyjump.core.JumpyJumpSession
+main: JumpyJumpSession
 depend: [SpigotCommons, BedrockSessionService]

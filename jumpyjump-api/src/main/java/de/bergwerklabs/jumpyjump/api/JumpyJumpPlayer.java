@@ -1,10 +1,7 @@
 package de.bergwerklabs.jumpyjump.api;
 
 import de.bergwerklabs.framework.bedrock.api.LabsPlayer;
-import de.bergwerklabs.framework.commons.spigot.particle.ParticleUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 

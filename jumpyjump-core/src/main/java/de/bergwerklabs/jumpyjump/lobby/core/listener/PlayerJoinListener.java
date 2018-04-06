@@ -1,4 +1,4 @@
-package de.bergwerklabs.jumpyjump.core.listener;
+package de.bergwerklabs.jumpyjump.lobby.core.listener;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;

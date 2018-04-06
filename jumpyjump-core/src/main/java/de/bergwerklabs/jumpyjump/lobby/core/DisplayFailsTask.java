@@ -1,13 +1,11 @@
-package de.bergwerklabs.jumpyjump.core;
+package de.bergwerklabs.jumpyjump.lobby.core;
 
-import de.bergwerklabs.framework.bedrock.api.PlayerRegistry;
 import de.bergwerklabs.framework.commons.spigot.title.ActionbarTitle;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**

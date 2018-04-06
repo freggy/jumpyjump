@@ -2,9 +2,7 @@ package de.bergwerklabs.jumpyjump.api;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
-import de.bergwerklabs.framework.commons.spigot.json.JsonUtil;
-import de.bergwerklabs.framework.commons.spigot.location.LocationUtil;
-import org.bukkit.Location;
+import org.apache.commons.lang3.builder.Diff;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,6 +65,7 @@ public class JumpyJumpMap {
     private Set<Material> checkpointMaterial;
     private Set<Material> allowedBlocks;
     private String name;
+    private Difficulty difficulty;
     private boolean isMirror;
 
     /**
@@ -82,6 +81,7 @@ public class JumpyJumpMap {
             @NotNull Set<Material> checkpointMaterial,
             @NotNull Set<Material> allowedBlocks,
             @NotNull String name,
+            @NotNull Difficulty difficulty,
             boolean isMirror
     ) {
         this.builder = builder;
@@ -101,6 +101,7 @@ public class JumpyJumpMap {
     public static JumpyJumpMap fromJson(@NotNull JsonObject object) {
         Preconditions.checkNotNull(object);
         String name = object.get("name").getAsString();
+        Difficulty difficulty = Difficulty.valueOf(object.get("difficulty").getAsString());
         boolean isMirror = object.get("mirror").getAsBoolean();
         Set<String> builders = new HashSet<>();
         Set<Course> courses = new HashSet<>();
@@ -123,6 +124,10 @@ public class JumpyJumpMap {
             allowedBlocks.add(Material.getMaterial(element.getAsString()));
         });
 
-        return new JumpyJumpMap(builders, courses, checkpointMaterial, allowedBlocks, name, isMirror);
+        return new JumpyJumpMap(builders, courses, checkpointMaterial, allowedBlocks, name, difficulty, isMirror);
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
     }
 }

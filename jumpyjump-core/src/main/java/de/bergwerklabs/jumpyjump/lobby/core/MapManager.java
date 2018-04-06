@@ -1,9 +1,8 @@
-package de.bergwerklabs.jumpyjump.core;
+package de.bergwerklabs.jumpyjump.lobby.core;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpMap;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;

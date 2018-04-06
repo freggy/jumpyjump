@@ -1,4 +1,4 @@
-package de.bergwerklabs.jumpyjump.core;
+package de.bergwerklabs.jumpyjump.lobby.core;
 
 import de.bergwerklabs.framework.commons.spigot.title.Title;
 import org.bukkit.entity.Player;

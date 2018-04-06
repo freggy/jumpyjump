@@ -1,4 +1,4 @@
-package de.bergwerklabs.jumpyjump.core.listener;
+package de.bergwerklabs.jumpyjump.lobby.core.listener;
 
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import de.bergwerklabs.framework.bedrock.api.LabsPlayer;
@@ -9,7 +9,7 @@ import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
 import de.bergwerklabs.jumpyjump.api.WinResult;
 import de.bergwerklabs.jumpyjump.api.event.CheckpointReachedEvent;
 import de.bergwerklabs.jumpyjump.api.event.JumpyJumpWinEvent;
-import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
+import de.bergwerklabs.jumpyjump.lobby.core.JumpyJumpSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,8 +22,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
-
-import static de.bergwerklabs.jumpyjump.core.JumpyJumpSession.getInstance;
 
 
 /**
@@ -49,7 +47,7 @@ public class PlayerInteractListener extends JumpyJumpListener {
         final Vector blockLocationVector = block.getLocation().toVector();
         final Location currentCheckpoint = jumpyJumpPlayer.getCurrentCheckpoint();
         final Location nextCheckpoint = jumpyJumpPlayer.getCourse().inspectNextCheckpoint();
-        final Collection<JumpyJumpPlayer> players = getInstance().getRegistry().getPlayers().values();
+        final Collection<JumpyJumpPlayer> players = JumpyJumpSession.getInstance().getRegistry().getPlayers().values();
 
         if (event.getAction() == Action.PHYSICAL) {
 
@@ -66,7 +64,7 @@ public class PlayerInteractListener extends JumpyJumpListener {
                 player.playSound(player.getEyeLocation(), Sound.LEVEL_UP, 100, 10);
                 player.setLevel(player.getLevel() + 1);
                 final int checkpointIndex = player.getLevel();
-                final PluginMessenger messenger =  getInstance().getGame().getMessenger();
+                final PluginMessenger messenger =  JumpyJumpSession.getInstance().getGame().getMessenger();
 
                 // TODO: add rank colors.
                 players.stream()

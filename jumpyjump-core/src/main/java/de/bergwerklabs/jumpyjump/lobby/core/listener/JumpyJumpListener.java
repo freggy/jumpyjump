@@ -1,8 +1,8 @@
-package de.bergwerklabs.jumpyjump.core.listener;
+package de.bergwerklabs.jumpyjump.lobby.core.listener;
 
 import de.bergwerklabs.jumpyjump.api.JumpyJumpMap;
-import de.bergwerklabs.jumpyjump.core.JumpyJump;
-import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
+import de.bergwerklabs.jumpyjump.lobby.core.JumpyJump;
+import de.bergwerklabs.jumpyjump.lobby.core.JumpyJumpSession;
 import org.bukkit.event.Listener;
 
 /**

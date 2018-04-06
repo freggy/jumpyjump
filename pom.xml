@@ -12,6 +12,7 @@
         <module>jumpyjump-core</module>
         <module>jumpyjump-api</module>
         <module>jumpyjumpy-lobby</module>
+        <module>jumpyjump-distribution-server</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
