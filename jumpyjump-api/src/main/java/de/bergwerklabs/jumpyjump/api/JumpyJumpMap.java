@@ -2,6 +2,9 @@ package de.bergwerklabs.jumpyjump.api;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
+import de.bergwerklabs.framework.commons.spigot.json.JsonUtil;
+import de.bergwerklabs.framework.commons.spigot.location.LocationUtil;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,6 +53,13 @@ public class JumpyJumpMap {
      */
     public Set<Material> getAllowedBlocks() {
         return allowedBlocks;
+    }
+
+    /**
+     * Determines whether or not the players will see each other.
+     */
+    public boolean isMirror() {
+        return isMirror;
     }
 
     private Set<String> builder;

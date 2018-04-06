@@ -28,7 +28,7 @@ public class DisplayFailsTask implements Runnable {
     public void run() {
         Collection<JumpyJumpPlayer> players = session.getRegistry().getPlayers().values()
                                                      .stream()
-                                                     .filter(Objects::nonNull)
+                                                     .filter(p -> p.getPlayer() != null)
                                                      .collect(Collectors.toList());
         Iterator<JumpyJumpPlayer> iterator = players.iterator();
 

@@ -109,8 +109,12 @@ public class JumpyJump extends LabsGame<JumpyJumpPlayer> {
         Objective objective = this.SCOREBOARD.registerNewObjective("distance", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         objective.setDisplayName(String.format("§6>> §eJumpyJump §6❘ §b%02d:%02d", duration / 60, duration % 60));
+        objective.getScore("§a§a§a").setScore(101);
+        objective.getScore("§a§a").setScore(-1);
+        objective.getScore("§6§m-------------").setScore(-2);
+        objective.getScore("§ebergwerkLABS.de").setScore(-3);
         players.forEach(jumpPlayer -> {
-            objective.getScore("§/" + jumpPlayer.getPlayer().getDisplayName()).setScore(0);
+            objective.getScore("§7" + jumpPlayer.getPlayer().getDisplayName()).setScore(0);
         });
     }
 }

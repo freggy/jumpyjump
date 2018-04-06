@@ -1,6 +1,7 @@
 package de.bergwerklabs.jumpyjump.core.listener;
 
 import de.bergwerklabs.framework.commons.math.SQRT;
+import de.bergwerklabs.jumpyjump.api.Course;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
 import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
 import org.bukkit.Location;
@@ -26,16 +27,26 @@ public class PlayerMoveListener extends JumpyJumpListener {
     private void onPlayerMove(PlayerMoveEvent event) {
         final Player player = event.getPlayer();
         final JumpyJumpPlayer jumpyJumpPlayer = JumpyJumpSession.getInstance().getPlayer(player.getUniqueId());
+        final Course course = jumpyJumpPlayer.getCourse();
         final Material ground = event.getTo().getBlock().getRelative(BlockFace.DOWN).getType();
 
         final Location nextCheckpoint = jumpyJumpPlayer.getCourse().inspectNextCheckpoint().clone().add(0.5, 0, 0.5);
         final Location spawnPoint = jumpyJumpPlayer.getCurrentCheckpoint().clone().add(0.5, 0, 0.5);
 
+        /*
+
+
+
         float totalDistance = (float)this.calculateDistanceFast(spawnPoint, nextCheckpoint);
         float currentDistance = (float)this.calculateDistanceFast(player.getLocation(), nextCheckpoint);
-        float wayPercentage = (currentDistance / totalDistance) * 100;
+        float wayPercentage = (currentDistance / totalDistance) * 100; */
 
-        player.setExp(1 - (wayPercentage / 100));
+        float checkpointPerc = this.calculateWayPercentage(spawnPoint, nextCheckpoint, player.getLocation());
+        float goalPerc = this.calculateWayPercentage(spawnPoint, course.getEnd().clone().add(0.5, 0, 0.5), player.getLocation());
+
+        jumpyJumpPlayer.setCheckpointProgress(1 - (checkpointPerc / 100));
+        jumpyJumpPlayer.setGoalProgress(100 - goalPerc);
+
         if (!this.map.getAllowedBlocks().contains(ground)) {
             jumpyJumpPlayer.resetToCheckpoint();
         }
@@ -48,6 +59,12 @@ public class PlayerMoveListener extends JumpyJumpListener {
                 (location1.getY() - location2.getY()) +
                 (location1.getZ() - location2.getZ())
         );*/
+    }
+
+    private float calculateWayPercentage(Location location1, Location location2, Location playerLocation) {
+        float totalDistance = (float)this.calculateDistanceFast(location1, location2);
+        float currentDistance = (float)this.calculateDistanceFast(playerLocation, location2);
+        return (currentDistance / totalDistance) * 100;
     }
 
 }

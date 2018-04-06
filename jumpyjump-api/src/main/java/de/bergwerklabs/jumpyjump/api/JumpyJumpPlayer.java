@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
 
 /**
  * Created by Yannic Rieger on 02.04.2018.
@@ -53,5 +54,16 @@ public class JumpyJumpPlayer extends LabsPlayer {
             player.teleport(this.course.getSpawn().clone().add(0.5, 0.5, 0.5));
         }
         else player.teleport(this.currentCheckpoint.clone().add(0.5, 0.5, 0.5));
+    }
+
+    public void setCheckpointProgress(float percentage) {
+        this.getPlayer().setExp(percentage);
+    }
+
+    public void setGoalProgress(float percentage) {
+        final Player player = this.getPlayer();
+        final Scoreboard scoreboard = player.getScoreboard();
+        if (scoreboard == null) return;
+        scoreboard.getObjective("distance").getScore("§7" + player.getDisplayName()).setScore(Math.round(percentage));
     }
 }

@@ -37,7 +37,7 @@ public class CountdownStopListener extends JumpyJumpListener implements Consumer
         this.scoreboard = scoreboard;
         this.timer = new LabsTimer(duration, timeLeft -> {
             String timeString = String.format("§b%02d:%02d", timeLeft / 60, timeLeft % 60);
-            players.stream().filter(Objects::nonNull).forEach(player -> {
+            players.stream().filter(p -> p.getPlayer() != null).forEach(player -> {
                 final Player spigotPlayer = player.getPlayer();
                 spigotPlayer.getScoreboard().getObjective("distance").setDisplayName("§6>> §eJumpyJump §6❘ " + timeString);
                 if (((float)timeLeft / 60F) % 10 == 0) {
