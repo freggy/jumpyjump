@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Created by Yannic Rieger on 05.04.2018.
@@ -24,7 +26,10 @@ public class DisplayFailsTask implements Runnable {
 
     @Override
     public void run() {
-        Collection<JumpyJumpPlayer> players = session.getRegistry().getPlayers().values();
+        Collection<JumpyJumpPlayer> players = session.getRegistry().getPlayers().values()
+                                                     .stream()
+                                                     .filter(Objects::nonNull)
+                                                     .collect(Collectors.toList());
         Iterator<JumpyJumpPlayer> iterator = players.iterator();
 
         StringBuilder displayBuilder = new StringBuilder("§eFails §6» ");

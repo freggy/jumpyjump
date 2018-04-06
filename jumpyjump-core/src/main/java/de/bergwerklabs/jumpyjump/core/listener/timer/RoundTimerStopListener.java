@@ -1,6 +1,5 @@
 package de.bergwerklabs.jumpyjump.core.listener.timer;
 
-import de.bergwerklabs.framework.commons.spigot.general.BossBar;
 import de.bergwerklabs.framework.commons.spigot.general.timer.event.LabsTimerStopEvent;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
 import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
