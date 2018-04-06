@@ -1,11 +1,11 @@
-package de.bergwerklabs.jumpyjump.lobby.core;
+package de.bergwerklabs.jumpyjump.core;
 
 import de.bergwerklabs.framework.bedrock.api.LabsGame;
 import de.bergwerklabs.framework.bedrock.api.PlayerRegistry;
 import de.bergwerklabs.framework.bedrock.api.event.session.SessionDonePreparationEvent;
 import de.bergwerklabs.framework.bedrock.api.session.MinigameSession;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
-import de.bergwerklabs.jumpyjump.lobby.core.listener.PlayerJoinListener;
+import de.bergwerklabs.jumpyjump.core.listener.PlayerJoinListener;
 import org.bukkit.Bukkit;
 
 import java.util.UUID;

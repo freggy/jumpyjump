@@ -1,4 +1,4 @@
-package de.bergwerklabs.jumpyjump.lobby.core;
+package de.bergwerklabs.jumpyjump.core;
 
 import com.google.common.collect.Iterators;
 import de.bergwerklabs.framework.bedrock.api.LabsGame;
@@ -7,10 +7,10 @@ import de.bergwerklabs.framework.commons.spigot.general.timer.LabsTimer;
 import de.bergwerklabs.jumpyjump.api.Course;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpMap;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
-import de.bergwerklabs.jumpyjump.lobby.core.listener.PlayerDamageListener;
-import de.bergwerklabs.jumpyjump.lobby.core.listener.PlayerInteractListener;
-import de.bergwerklabs.jumpyjump.lobby.core.listener.PlayerMoveListener;
-import de.bergwerklabs.jumpyjump.lobby.core.listener.timer.CountdownStopListener;
+import de.bergwerklabs.jumpyjump.core.listener.PlayerDamageListener;
+import de.bergwerklabs.jumpyjump.core.listener.PlayerInteractListener;
+import de.bergwerklabs.jumpyjump.core.listener.PlayerMoveListener;
+import de.bergwerklabs.jumpyjump.core.listener.timer.CountdownStopListener;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;

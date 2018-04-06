@@ -1,8 +1,8 @@
-package de.bergwerklabs.jumpyjump.lobby.core.listener;
+package de.bergwerklabs.jumpyjump.core.listener;
 
 import de.bergwerklabs.jumpyjump.api.Course;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
-import de.bergwerklabs.jumpyjump.lobby.core.JumpyJumpSession;
+import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;

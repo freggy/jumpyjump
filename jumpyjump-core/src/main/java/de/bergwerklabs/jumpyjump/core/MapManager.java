@@ -1,4 +1,4 @@
-package de.bergwerklabs.jumpyjump.lobby.core;
+package de.bergwerklabs.jumpyjump.core;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpMap;

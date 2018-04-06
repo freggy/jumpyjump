@@ -1,4 +1,4 @@
-package de.bergwerklabs.jumpyjump.lobby.core;
+package de.bergwerklabs.jumpyjump.core;
 
 import de.bergwerklabs.framework.bedrock.api.PlayerFactory;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;

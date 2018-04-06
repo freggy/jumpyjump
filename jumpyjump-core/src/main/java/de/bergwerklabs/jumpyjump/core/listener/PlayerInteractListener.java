@@ -1,4 +1,4 @@
-package de.bergwerklabs.jumpyjump.lobby.core.listener;
+package de.bergwerklabs.jumpyjump.core.listener;
 
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import de.bergwerklabs.framework.bedrock.api.LabsPlayer;
@@ -9,7 +9,7 @@ import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
 import de.bergwerklabs.jumpyjump.api.WinResult;
 import de.bergwerklabs.jumpyjump.api.event.CheckpointReachedEvent;
 import de.bergwerklabs.jumpyjump.api.event.JumpyJumpWinEvent;
-import de.bergwerklabs.jumpyjump.lobby.core.JumpyJumpSession;
+import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

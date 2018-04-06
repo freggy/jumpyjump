@@ -1,12 +1,12 @@
-package de.bergwerklabs.jumpyjump.lobby.core.listener.timer;
+package de.bergwerklabs.jumpyjump.core.listener.timer;
 
 import de.bergwerklabs.framework.commons.spigot.general.timer.LabsTimer;
 import de.bergwerklabs.framework.commons.spigot.general.timer.event.LabsTimerStopEvent;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
-import de.bergwerklabs.jumpyjump.lobby.core.Common;
-import de.bergwerklabs.jumpyjump.lobby.core.DisplayFailsTask;
-import de.bergwerklabs.jumpyjump.lobby.core.JumpyJumpSession;
-import de.bergwerklabs.jumpyjump.lobby.core.listener.JumpyJumpListener;
+import de.bergwerklabs.jumpyjump.core.DisplayFailsTask;
+import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
+import de.bergwerklabs.jumpyjump.core.listener.JumpyJumpListener;
+import de.bergwerklabs.jumpyjump.core.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
