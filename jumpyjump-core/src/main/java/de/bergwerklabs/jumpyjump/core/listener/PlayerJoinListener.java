@@ -23,5 +23,4 @@ public class PlayerJoinListener implements Listener {
         player.setWalkSpeed(0.2F);
         player.setGameMode(GameMode.ADVENTURE);
     }
-
 }

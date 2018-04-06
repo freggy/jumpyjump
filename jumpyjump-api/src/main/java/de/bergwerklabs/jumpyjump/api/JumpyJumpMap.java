@@ -1,9 +1,12 @@
 package de.bergwerklabs.jumpyjump.api;
 
 import com.google.common.base.Preconditions;
+import com.google.common.hash.Hashing;
 import com.google.gson.JsonObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.Diff;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -60,6 +63,14 @@ public class JumpyJumpMap {
         return isMirror;
     }
 
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public String getId() {
+        return id;
+    }
+
     private Set<String> builder;
     private Set<Course> courses;
     private Set<Material> checkpointMaterial;
@@ -67,6 +78,7 @@ public class JumpyJumpMap {
     private String name;
     private Difficulty difficulty;
     private boolean isMirror;
+    private String id;
 
     /**
      * @param builder            the builders that built the map.
@@ -91,6 +103,7 @@ public class JumpyJumpMap {
         this.allowedBlocks = allowedBlocks;
         this.difficulty = difficulty;
         this.isMirror = isMirror;
+        this.id = Hashing.adler32().hashBytes((StringUtils.join(builder, ",") + name + difficulty.name()).getBytes()).toString();
     }
 
     /**
@@ -126,9 +139,5 @@ public class JumpyJumpMap {
         });
 
         return new JumpyJumpMap(builders, courses, checkpointMaterial, allowedBlocks, name, difficulty, isMirror);
-    }
-
-    public Difficulty getDifficulty() {
-        return difficulty;
     }
 }
