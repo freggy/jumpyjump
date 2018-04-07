@@ -31,7 +31,7 @@ public class JumpyJumpSession extends MinigameSession<JumpyJumpPlayer> {
     }
 
     public LabsGame getGame() {
-        return new JumpyJump();
+        return this.jumpyJump;
     }
 
     /**
@@ -52,6 +52,7 @@ public class JumpyJumpSession extends MinigameSession<JumpyJumpPlayer> {
     private static JumpyJumpSession instance;
     private PlayerRegistry<JumpyJumpPlayer> registry;
     private MapManager mapManager;
+    private JumpyJump jumpyJump = new JumpyJump();
 
     public void prepare() {
         instance = this;

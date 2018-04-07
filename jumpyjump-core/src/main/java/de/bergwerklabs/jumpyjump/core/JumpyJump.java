@@ -1,9 +1,12 @@
 package de.bergwerklabs.jumpyjump.core;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Iterators;
 import de.bergwerklabs.framework.bedrock.api.LabsGame;
 import de.bergwerklabs.framework.bedrock.api.PlayerRegistry;
 import de.bergwerklabs.framework.commons.spigot.general.timer.LabsTimer;
+import de.bergwerklabs.framework.commons.spigot.scoreboard.LabsScoreboard;
+import de.bergwerklabs.framework.commons.spigot.scoreboard.Row;
 import de.bergwerklabs.jumpyjump.api.Course;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpMap;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
@@ -11,18 +14,19 @@ import de.bergwerklabs.jumpyjump.core.listener.PlayerDamageListener;
 import de.bergwerklabs.jumpyjump.core.listener.PlayerInteractListener;
 import de.bergwerklabs.jumpyjump.core.listener.PlayerMoveListener;
 import de.bergwerklabs.jumpyjump.core.listener.timer.CountdownStopListener;
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Yannic Rieger on 02.04.2018.
@@ -33,24 +37,32 @@ import java.util.Iterator;
  */
 public class JumpyJump extends LabsGame<JumpyJumpPlayer> {
 
+    public boolean isFinished() {
+        return finished;
+    }
+
     public long getStartTime() {
-        return startTime;
+        return this.startTime;
+    }
+
+    public void setStartTime() {
+        this.startTime = System.currentTimeMillis();
     }
 
     public JumpyJump() {
         super("JumpyJump");
     }
 
+    private LabsScoreboard scoreboard;
+    private boolean finished = false;
     private long startTime;
-    private final Scoreboard SCOREBOARD = Bukkit.getScoreboardManager().getNewScoreboard();
 
     public void start(PlayerRegistry<JumpyJumpPlayer> registry) {
         JumpyJumpSession.getInstance().setRegistry(registry);
-        this.startTime = System.currentTimeMillis();
+        this.playerRegistry = registry;
         final JumpyJumpMap map = JumpyJumpSession.getInstance().getMapManager().getMap();
         final Iterator<Course> courses = JumpyJumpSession.getInstance().getMapManager().getMap().getCourses().iterator();
         final Collection<JumpyJumpPlayer> players = registry.getPlayers().values();
-
         this.registerListeners();
         this.setUpScoreboard(players, 60 * 20);
 
@@ -90,13 +102,26 @@ public class JumpyJump extends LabsGame<JumpyJumpPlayer> {
                     playerObject.playSound(playerObject.getEyeLocation(), Sound.ORB_PICKUP, 100, 1);
                 });
             });
-            timer.addStopListener(new CountdownStopListener(JumpyJumpSession.getInstance(), 60 * 20, this.SCOREBOARD));
+            timer.addStopListener(new CountdownStopListener(JumpyJumpSession.getInstance(), 60 * 20, this.scoreboard));
             timer.start();
         }, 20 * 2);
     }
 
     public void stop() {
-        this.messenger.messageAll("WIN!");
+        this.finished = true;
+        Bukkit.getScheduler().runTaskLater(JumpyJumpSession.getInstance(), () -> {
+            this.playerRegistry.getPlayers()
+                               .values()
+                               .stream()
+                               .filter(p -> p.getPlayer() != null)
+                               .forEach(jumpPlayer -> {
+                this.getMessenger().messageSome("Der Server startet in §b10 §7Sekunden neu.", jumpPlayer.getPlayer());
+            });
+        }, 20 * 2);
+
+        Bukkit.getScheduler().runTaskLaterAsynchronously(JumpyJumpSession.getInstance(), () -> {
+            this.getMessenger().messageAll("TSCHAU");
+        }, 20 * 12);
     }
 
     private void registerListeners() {
@@ -106,15 +131,14 @@ public class JumpyJump extends LabsGame<JumpyJumpPlayer> {
     }
 
     private void setUpScoreboard(Collection<JumpyJumpPlayer> players, int duration) {
-        Objective objective = this.SCOREBOARD.registerNewObjective("distance", "dummy");
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName(String.format("§6>> §eJumpyJump §6❘ §b%02d:%02d", duration / 60, duration % 60));
-        objective.getScore("§a§a§a").setScore(101);
-        objective.getScore("§a§a").setScore(-1);
-        objective.getScore("§6§m-------------").setScore(-2);
-        objective.getScore("§ebergwerkLABS.de").setScore(-3);
+        this.scoreboard = new LabsScoreboard(String.format("§6>> §eJumpyJump §6❘ §b%02d:%02d", duration / 60, duration % 60), "distance");
+        scoreboard.addRow(players.size() + 2, new Row(this.scoreboard, "§a§a§a"));
+        scoreboard.addRow(2, new Row(scoreboard, "§a§a"));
+        scoreboard.addRow(1, new Row(scoreboard, "§6§m-------------"));
+        scoreboard.addRow(0, new Row(scoreboard, "§ebergwerkLABS.de"));
+        AtomicInteger count = new AtomicInteger(2);
         players.forEach(jumpPlayer -> {
-            objective.getScore("§7" + jumpPlayer.getPlayer().getDisplayName()).setScore(0);
+            scoreboard.addRow(count.getAndIncrement(), new Row(scoreboard, "§7" + jumpPlayer.getPlayer().getDisplayName() + ": §b0%"));
         });
     }
 }

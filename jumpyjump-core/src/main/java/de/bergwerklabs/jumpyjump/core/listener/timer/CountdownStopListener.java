@@ -2,6 +2,7 @@ package de.bergwerklabs.jumpyjump.core.listener.timer;
 
 import de.bergwerklabs.framework.commons.spigot.general.timer.LabsTimer;
 import de.bergwerklabs.framework.commons.spigot.general.timer.event.LabsTimerStopEvent;
+import de.bergwerklabs.framework.commons.spigot.scoreboard.LabsScoreboard;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
 import de.bergwerklabs.jumpyjump.core.DisplayFailsTask;
 import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
@@ -10,7 +11,6 @@ import de.bergwerklabs.jumpyjump.core.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -26,9 +26,9 @@ public class CountdownStopListener extends JumpyJumpListener implements Consumer
     private DisplayFailsTask displayFailsTask;
     private LabsTimer timer;
     private Collection<JumpyJumpPlayer> players;
-    private Scoreboard scoreboard;
+    private LabsScoreboard scoreboard;
 
-    public CountdownStopListener(JumpyJumpSession session, int duration, Scoreboard scoreboard) {
+    public CountdownStopListener(JumpyJumpSession session, int duration, LabsScoreboard scoreboard) {
         super(session);
         this.players = this.session.getRegistry().getPlayers().values();
         this.displayFailsTask = new DisplayFailsTask(JumpyJumpSession.getInstance());
@@ -37,7 +37,7 @@ public class CountdownStopListener extends JumpyJumpListener implements Consumer
             String timeString = String.format("§b%02d:%02d", timeLeft / 60, timeLeft % 60);
             players.stream().filter(p -> p.getPlayer() != null).forEach(player -> {
                 final Player spigotPlayer = player.getPlayer();
-                spigotPlayer.getScoreboard().getObjective("distance").setDisplayName("§6>> §eJumpyJump §6❘ " + timeString);
+                  player.getScoreboard().setTitle("§6>> §eJumpyJump §6❘ " + timeString);
                 if (((float)timeLeft / 60F) % 10 == 0) {
                     this.game.getMessenger().message("Noch " + timeString + " §7Minuten.", spigotPlayer);
                     spigotPlayer.playSound(spigotPlayer.getEyeLocation(), Sound.NOTE_BASS, 1.0F, 1.0F);
@@ -53,6 +53,7 @@ public class CountdownStopListener extends JumpyJumpListener implements Consumer
 
     @Override
     public void accept(LabsTimerStopEvent labsTimerStopEvent) {
+        this.game.setStartTime();
         // Make players see each other again.
         players.forEach(player -> {
             final Player playerObject = player.getPlayer();
@@ -60,7 +61,7 @@ public class CountdownStopListener extends JumpyJumpListener implements Consumer
             player.unfreeze();
             playerObject.playSound(playerObject.getEyeLocation(), Sound.COW_HURT, 100, 1);
             Common.createAndSendTitle(playerObject, "§bLOS!", "");
-            player.getPlayer().setScoreboard(this.scoreboard);
+            player.setScoreboard(this.scoreboard);
             this.timer.start();
         });
         Bukkit.getScheduler().runTaskTimerAsynchronously(JumpyJumpSession.getInstance(), this.displayFailsTask, 0L, 20L);

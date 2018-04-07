@@ -5,10 +5,12 @@ import de.bergwerklabs.framework.bedrock.api.LabsPlayer;
 import de.bergwerklabs.framework.commons.math.vector.Vector3F;
 import de.bergwerklabs.framework.commons.spigot.chat.messenger.PluginMessenger;
 import de.bergwerklabs.framework.commons.spigot.particle.ParticleUtil;
+import de.bergwerklabs.framework.commons.spigot.title.Title;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
 import de.bergwerklabs.jumpyjump.api.WinResult;
 import de.bergwerklabs.jumpyjump.api.event.CheckpointReachedEvent;
 import de.bergwerklabs.jumpyjump.api.event.JumpyJumpWinEvent;
+import de.bergwerklabs.jumpyjump.core.Common;
 import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,7 +23,12 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -38,6 +45,7 @@ public class PlayerInteractListener extends JumpyJumpListener {
 
     @EventHandler
     private void onPlayerInteract(PlayerInteractEvent event) {
+        if (this.game.isFinished()) return;
         final Player player = event.getPlayer();
         final Block block = event.getClickedBlock();
         if (block == null) return;
@@ -94,8 +102,22 @@ public class PlayerInteractListener extends JumpyJumpListener {
             }
 
             if (material == Material.GOLD_PLATE) {
-                WinResult result = new WinResult(System.currentTimeMillis() - this.game.getStartTime());
+                long elapsed = System.currentTimeMillis() - this.game.getStartTime();
+                WinResult result = new WinResult(elapsed);
                 Bukkit.getPluginManager().callEvent(new JumpyJumpWinEvent(jumpyJumpPlayer, this.map, result));
+
+                players.forEach(jumpPlayer -> {
+                    final Player spigotPlayer = jumpPlayer.getPlayer();
+                    // TODO: use rank color
+                    new Title("§7" + player.getDisplayName(), "§ehat das Spiel gewonnen", 40, 40, 40)
+                            .display(spigotPlayer);
+                    spigotPlayer.playSound(spigotPlayer.getEyeLocation(), Sound.WITHER_SPAWN, 10, 1);
+                });
+
+                SimpleDateFormat sdf = new SimpleDateFormat("mm:ss.SSS");
+                String formatted = sdf.format(new Date(elapsed));
+
+                this.game.getMessenger().message("Deine Zeit: §b" + formatted, player);
                 this.game.stop();
             }
             event.setCancelled(true);

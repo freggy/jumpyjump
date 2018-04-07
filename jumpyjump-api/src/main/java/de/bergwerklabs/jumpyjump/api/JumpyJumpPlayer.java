@@ -1,6 +1,7 @@
 package de.bergwerklabs.jumpyjump.api;
 
 import de.bergwerklabs.framework.bedrock.api.LabsPlayer;
+import de.bergwerklabs.framework.commons.spigot.scoreboard.LabsScoreboard;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
@@ -25,6 +26,10 @@ public class JumpyJumpPlayer extends LabsPlayer {
 
     public int getFails() { return fails; }
 
+    public LabsScoreboard getScoreboard() {
+        return scoreboard;
+    }
+
     public void setCourse(Course course) {
         this.course = course;
     }
@@ -33,9 +38,15 @@ public class JumpyJumpPlayer extends LabsPlayer {
         this.currentCheckpoint = currentCheckpoint;
     }
 
+    public void setScoreboard(LabsScoreboard scoreboard) {
+        this.scoreboard = scoreboard;
+        scoreboard.apply(getPlayer());
+    }
+
     private Course course;
     private Location currentCheckpoint;
     private int fails;
+    private LabsScoreboard scoreboard;
 
     public JumpyJumpPlayer(Player player) {
         super(player.getUniqueId());
@@ -59,8 +70,10 @@ public class JumpyJumpPlayer extends LabsPlayer {
 
     public void setGoalProgress(float percentage) {
         final Player player = this.getPlayer();
-        final Scoreboard scoreboard = player.getScoreboard();
-        if (scoreboard == null || scoreboard.getObjective("distance") == null) return;
-        scoreboard.getObjective("distance").getScore("§7" + player.getDisplayName()).setScore(Math.round(percentage));
+        if (this.scoreboard == null) return;
+        this.scoreboard.getRowsByContent().values()
+                       .stream()
+                       .filter(row -> row.getText().contains("§7" + player.getDisplayName()))
+                       .findFirst().ifPresent(row -> row.setText("§7" + player.getDisplayName() + ": §b" + Math.round(percentage) + "%"));
     }
 }
