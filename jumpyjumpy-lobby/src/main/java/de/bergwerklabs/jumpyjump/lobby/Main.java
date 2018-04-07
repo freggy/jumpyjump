@@ -2,15 +2,10 @@ package de.bergwerklabs.jumpyjump.lobby;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonWriter;
 import de.bergwerklabs.framework.commons.spigot.chat.messenger.PluginMessenger;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
-import de.bergwerklabs.jumpyjump.lobby.config.ConfigDeserializer;
 import de.bergwerklabs.jumpyjump.lobby.config.ConfigSerializer;
-import de.bergwerklabs.jumpyjump.lobby.listener.InventoryClickListener;
-import de.bergwerklabs.jumpyjump.lobby.listener.InventoryCloseListener;
-import de.bergwerklabs.jumpyjump.lobby.listener.PlayerInteractAtEntityListener;
-import de.bergwerklabs.jumpyjump.lobby.listener.PlayerJoinListener;
+import de.bergwerklabs.jumpyjump.lobby.listener.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,6 +44,9 @@ public class Main extends JavaPlugin {
         manager.registerEvents(new PlayerJoinListener(this.config, this.mapManager), this);
         manager.registerEvents(new InventoryCloseListener(), this);
         manager.registerEvents(new InventoryClickListener(this.config, this.mapManager), this);
+        manager.registerEvents(new CancelListener(), this);
+        manager.registerEvents(new PlayerDropItemListener(), this);
+
     }
 
     private void setUpConfig() {

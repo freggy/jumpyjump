@@ -1,6 +1,5 @@
 package de.bergwerklabs.jumpyjump.core;
 
-import com.google.common.base.Stopwatch;
 import com.google.common.collect.Iterators;
 import de.bergwerklabs.framework.bedrock.api.LabsGame;
 import de.bergwerklabs.framework.bedrock.api.PlayerRegistry;
@@ -10,22 +9,19 @@ import de.bergwerklabs.framework.commons.spigot.scoreboard.Row;
 import de.bergwerklabs.jumpyjump.api.Course;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpMap;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
-import de.bergwerklabs.jumpyjump.core.listener.PlayerDamageListener;
+import de.bergwerklabs.jumpyjump.core.listener.CancelListener;
 import de.bergwerklabs.jumpyjump.core.listener.PlayerInteractListener;
 import de.bergwerklabs.jumpyjump.core.listener.PlayerMoveListener;
 import de.bergwerklabs.jumpyjump.core.listener.timer.CountdownStopListener;
-import org.apache.commons.lang.time.StopWatch;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -127,7 +123,7 @@ public class JumpyJump extends LabsGame<JumpyJumpPlayer> {
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(JumpyJumpSession.getInstance()), JumpyJumpSession.getInstance());
         Bukkit.getPluginManager().registerEvents(new PlayerMoveListener(JumpyJumpSession.getInstance()), JumpyJumpSession.getInstance());
-        Bukkit.getPluginManager().registerEvents(new PlayerDamageListener(), JumpyJumpSession.getInstance());
+        Bukkit.getPluginManager().registerEvents(new CancelListener(), JumpyJumpSession.getInstance());
     }
 
     private void setUpScoreboard(Collection<JumpyJumpPlayer> players, int duration) {
