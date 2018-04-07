@@ -3,6 +3,7 @@ package de.bergwerklabs.jumpyjump.lobby;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
+import de.bergwerklabs.framework.commons.spigot.chat.messenger.PluginMessenger;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
 import de.bergwerklabs.jumpyjump.lobby.config.ConfigDeserializer;
 import de.bergwerklabs.jumpyjump.lobby.config.ConfigSerializer;
@@ -14,9 +15,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 /**
@@ -27,15 +27,20 @@ import java.util.logging.Logger;
  */
 public class Main extends JavaPlugin {
 
+    public static Main getInstance() { return instance; }
+    public static final PluginMessenger MESSENGER = new PluginMessenger("Lobby");
+
+    private static Main instance;
     private final Logger LOGGER = Bukkit.getLogger();
     private Config config = Config.DEFAULT_CONFIG;
     private LobbyMapManager mapManager;
 
     @Override
     public void onEnable() {
+        instance = this;
         this.setUpConfig();
-        this.registerListeners();
         this.mapManager = new LobbyMapManager(null, null, null);
+        this.registerListeners();
     }
 
     private void registerListeners() {
@@ -50,7 +55,7 @@ public class Main extends JavaPlugin {
         File configFile = new File(this.getDataFolder().getAbsolutePath() + "/config.json");
         Gson gson = new GsonBuilder().setPrettyPrinting()
                                      .registerTypeAdapter(Config.class, new ConfigSerializer())
-                                     .registerTypeAdapter(Config.class, new ConfigDeserializer())
+                                     //.registerTypeAdapter(Config.class, new ConfigDeserializer())
                                      .create();
 
         try {
@@ -58,7 +63,15 @@ public class Main extends JavaPlugin {
                 LOGGER.info("Config file not present, creating it...");
                 this.getDataFolder().mkdir();
                 configFile.createNewFile();
-                gson.toJson(this.config, Config.class, new JsonWriter(new FileWriter(configFile)));
+
+                try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(configFile), StandardCharsets.UTF_8)) {
+                    String json = gson.toJson(this.config, Config.class);
+                    writer.write(json);
+                    writer.flush();
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
             else {
                 LOGGER.info("Config found, reading it...");

@@ -67,6 +67,10 @@ public class JumpyJumpMap {
         return difficulty;
     }
 
+    /**
+     * Gets the ID of this map. The ID is generated using the Adler32 algorithm.
+     * {@code ID = Adler32(builder + name + difficulty)}
+     */
     public String getId() {
         return id;
     }
@@ -87,7 +91,8 @@ public class JumpyJumpMap {
      * @param allowedBlocks      the {@link Material}s where the player is allowed to step on.
      * @param name               the name of the map.
      */
-    private JumpyJumpMap(
+    // TODO: make private
+    public JumpyJumpMap(
             @NotNull Set<String> builder,
             @NotNull Set<Course> courses,
             @NotNull Set<Material> checkpointMaterial,

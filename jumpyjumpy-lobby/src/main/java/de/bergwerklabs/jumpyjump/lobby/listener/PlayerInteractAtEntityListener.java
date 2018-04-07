@@ -4,6 +4,7 @@ import de.bergwerklabs.framework.commons.spigot.item.ItemStackBuilder;
 import de.bergwerklabs.jumpyjump.api.Difficulty;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpMap;
 import de.bergwerklabs.jumpyjump.lobby.LobbyMapManager;
+import de.bergwerklabs.jumpyjump.lobby.Main;
 import de.bergwerklabs.jumpyjump.lobby.MapSelectSession;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
 import org.bukkit.Bukkit;
@@ -31,25 +32,34 @@ public class PlayerInteractAtEntityListener extends LobbyListener {
         final Player player = event.getPlayer();
         if (player.getItemInHand().getType() != this.config.getChallengeItem().getType()) return;
         final Player other = (Player) event.getRightClicked();
-        player.openInventory(this.createInventory(other));
-        MapSelectSession.SESSIONS.putIfAbsent(player.getUniqueId(), new MapSelectSession(player, other));
+
+        final MapSelectSession potenial = MapSelectSession.SESSIONS.get(other.getUniqueId());
+        if (potenial != null) {
+            Main.MESSENGER.message("§cDieser Spieler fordert dich bereits heraus.", player);
+            return;
+        }
+
+        final Inventory inventory = this.createInventory();
+        final MapSelectSession session = new MapSelectSession(player, other);
+        session.setOpenInventory(inventory);
+        player.openInventory(inventory);
     }
 
-    private Inventory createInventory(Player other) {
+    private Inventory createInventory() {
         // TODO: get rank color
-        final Inventory inventory = Bukkit.createInventory(null, 9 * 3, other.getDisplayName() + "§6| " +
-                "§7Schwierigkeit");
-        ItemStack easy = new ItemStackBuilder(Material.STAINED_GLASS)
+        final Inventory inventory = Bukkit.createInventory(null, 9 * 3,  "§6>> §eJumpyJump §6| " +
+                "§bSchwierigkeit");
+        ItemStack easy = new ItemStackBuilder(Material.STAINED_CLAY)
                 .setName(Difficulty.EASY.getDisplayName())
-                .setData((byte)6)
-                .create();
-
-        ItemStack medium = new ItemStackBuilder(Material.STAINED_GLASS)
-                .setName(Difficulty.MEDIUM.getDisplayName())
                 .setData((byte)5)
                 .create();
 
-        ItemStack hard = new ItemStackBuilder(Material.STAINED_GLASS)
+        ItemStack medium = new ItemStackBuilder(Material.STAINED_CLAY)
+                .setName(Difficulty.MEDIUM.getDisplayName())
+                .setData((byte)4)
+                .create();
+
+        ItemStack hard = new ItemStackBuilder(Material.STAINED_CLAY)
                 .setName(Difficulty.HARD.getDisplayName())
                 .setData((byte)14)
                 .create();
@@ -64,4 +74,5 @@ public class PlayerInteractAtEntityListener extends LobbyListener {
         }
         return inventory;
     }
+
 }
