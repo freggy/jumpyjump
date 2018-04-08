@@ -17,41 +17,55 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MapSession {
 
-    public static final Map<UUID, MapSession> SESSIONS = new HashMap<>();
+    public static final Map<UUID, MapSession> SESSIONS        = new HashMap<>();
     public static final Map<UUID, Tuple<UUID, Long>> REQUESTS = new ConcurrentHashMap<>();
 
-    private Inventory openInventory;
-    private Player challenger;
-    private Player challenged;
-    private String requestedMapId;
-
-    public MapSession(Player challenger, Player challenged) {
-        MapSession.SESSIONS.put(challenger.getUniqueId(), this);
-        this.challenger = challenger;
-        this.challenged = challenged;
+    public int getPriority() {
+        return priority;
     }
 
-    public Player getChallenger() {
+    private Inventory openInventory;
+    private LobbyPlayer challenger;
+    private LobbyPlayer challenged;
+    private String requestedMapId;
+    private int priority;
+
+    public MapSession(LobbyPlayer challenger, LobbyPlayer challenged) {
+        MapSession.SESSIONS.put(challenger.getPlayer().getUniqueId(), this);
+        this.challenger = challenger;
+        this.challenged = challenged;
+        this.priority = this.challenger.getPriority() + this.challenged.getPriority();
+    }
+
+    public LobbyPlayer getChallenger() {
         return challenger;
     }
 
-    public Player getChallenged() {
+    public LobbyPlayer getChallenged() {
         return challenged;
     }
 
-    public void requestMapServer(String mapHash) {
-        this.requestedMapId = mapHash;
+    public String getRequestedMapId() {
+        return requestedMapId;
     }
 
     public Inventory getOpenInventory() {
         return openInventory;
     }
 
+    public void requestMapServer(String mapHash) {
+        this.requestedMapId = mapHash;
+        Main.SERVER_MANAGER.addToQueue(this);
+    }
+
     public void setOpenInventory(Inventory openInventory) {
         this.openInventory = openInventory;
     }
 
-    public String getRequestedMapId() {
-        return requestedMapId;
+    public static boolean isInSession(UUID uuid) {
+        return MapSession.SESSIONS
+                .values()
+                .stream()
+                .anyMatch(session -> session.getChallenged().getPlayer().getUniqueId().equals(uuid));
     }
 }

@@ -23,6 +23,7 @@ public class ConfigDeserializer implements JsonDeserializer<Config> {
         ItemStack challengeItem = ItemStackUtil.createItemStackFromJson(object.get("challenge-item").getAsJsonObject());
         ItemStack quickJoin = ItemStackUtil.createItemStackFromJson(object.get("quick-join-item").getAsJsonObject());
         ItemStack lobby = ItemStackUtil.createItemStackFromJson(object.get("lobby-item").getAsJsonObject());
-        return new Config(challengeItem, lobby, quickJoin);
+        ItemStack quickJoinLeave = ItemStackUtil.createItemStackFromJson(object.get("quick-join-leave-item").getAsJsonObject());
+        return new Config(challengeItem, lobby, quickJoin, quickJoinLeave);
     }
 }

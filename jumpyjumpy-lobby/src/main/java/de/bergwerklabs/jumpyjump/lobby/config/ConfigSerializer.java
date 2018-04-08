@@ -28,6 +28,7 @@ public class ConfigSerializer implements JsonSerializer<Config> {
         jsonObject.add("lobby-item", ItemStackUtil.itemStackToJson(config.getLobbyItem()));
         jsonObject.add("challenge-item", ItemStackUtil.itemStackToJson(config.getChallengeItem()));
         jsonObject.add("quick-join-item", ItemStackUtil.itemStackToJson(config.getQuickJoinItem()));
+        jsonObject.add("quick-join-leave-item", ItemStackUtil.itemStackToJson(config.getLeaveQuickJoin()));
         return jsonObject;
     }
 }

@@ -35,15 +35,8 @@ public class PlayerInteractAtEntityListener extends LobbyListener {
         if (player.getItemInHand().getType() != this.config.getChallengeItem().getType()) return;
         final Player other = (Player) event.getRightClicked();
 
-        boolean selfSessioned = MapSession.SESSIONS
-                .values()
-                .stream()
-                .anyMatch(session -> session.getChallenged().getUniqueId().equals(player.getUniqueId()));
-
-        boolean otherSessioned = MapSession.SESSIONS
-                .values()
-                .stream()
-                .anyMatch(session -> session.getChallenged().getUniqueId().equals(other.getUniqueId()));
+        boolean selfSessioned = MapSession.isInSession(player.getUniqueId());
+        boolean otherSessioned = MapSession.isInSession(other.getUniqueId());
 
         if (selfSessioned || otherSessioned) {
             Main.MESSENGER.message("§cHerausfordern ist nicht möglich.", player);
@@ -68,9 +61,9 @@ public class PlayerInteractAtEntityListener extends LobbyListener {
         // TODO: use Rankcolor
         // TODO: use UTF-8 "|" EVERYWHERE!!
         String firstMessage = "§b" + player.getDisplayName() + " §bfordert dich heraus!";
-        Main.MESSENGER.message(firstMessage, other);
-
         String centered = StringUtils.center("", firstMessage.length() / 4);
+
+        Main.MESSENGER.message(firstMessage, other);
 
         BaseComponent[] message = new ComponentBuilder(centered)
                 .append("[ANNEHMEN]").color(ChatColor.GREEN).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cacpt " + player.getName()))
@@ -79,10 +72,11 @@ public class PlayerInteractAtEntityListener extends LobbyListener {
                 .create();
         other.spigot().sendMessage(message);
         other.sendMessage("");
+
         other.playSound(other.getEyeLocation(), Sound.LEVEL_UP, 100 ,1);
         player.playSound(other.getEyeLocation(), Sound.CLICK, 100 ,1);
+
         Main.MESSENGER.message("Du hast §b" + other.getDisplayName() + " §7herausgefordert.", player);
         MapSession.REQUESTS.put(player.getUniqueId(), new Tuple<>(other.getUniqueId(), System.currentTimeMillis()));
     }
-
 }

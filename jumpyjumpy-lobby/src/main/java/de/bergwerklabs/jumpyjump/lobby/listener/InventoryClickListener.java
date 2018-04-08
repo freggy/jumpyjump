@@ -96,7 +96,7 @@ public class InventoryClickListener extends LobbyListener {
         player.closeInventory();
 
         this.displaySelectedMap((Player)player, lore, mapName);
-        this.displaySelectedMap(session.getChallenged(), lore, mapName);
+        this.displaySelectedMap(session.getChallenged().getPlayer(), lore, mapName);
         session.requestMapServer(id);
     }
 

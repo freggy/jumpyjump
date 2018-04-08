@@ -2,7 +2,7 @@ name: JumpyJumpyLobby
 author: freggy
 version: 1.0
 main: de.bergwerklabs.jumpyjump.lobby.Main
-depend: [SpigotCommons]
+depend: [SpigotCommons, NPCStandalone]
 commands:
     cacpt:
     cdny:

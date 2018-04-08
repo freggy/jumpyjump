@@ -3,6 +3,7 @@ package de.bergwerklabs.jumpyjump.lobby.command;
 import de.bergwerklabs.framework.commons.misc.Tuple;
 import de.bergwerklabs.framework.commons.spigot.item.ItemStackBuilder;
 import de.bergwerklabs.jumpyjump.api.Difficulty;
+import de.bergwerklabs.jumpyjump.lobby.LobbyPlayer;
 import de.bergwerklabs.jumpyjump.lobby.Main;
 import de.bergwerklabs.jumpyjump.lobby.MapSession;
 import org.bukkit.Bukkit;
@@ -53,11 +54,17 @@ public class ChallengeAcceptCommand implements CommandExecutor {
         }
 
         MapSession.REQUESTS.remove(player.getUniqueId());
-        final MapSession session = new MapSession(player, sender);
+
+        final LobbyPlayer challenger = Main.LOBBY_PLAYERS.get(player.getUniqueId());
+        final LobbyPlayer challenged = Main.LOBBY_PLAYERS.get(sender.getUniqueId());
+
+        final MapSession session = new MapSession(challenger, challenged);
         MapSession.SESSIONS.put(player.getUniqueId(), session);
+
         final Inventory inventory = this.createInventory();
         session.setOpenInventory(inventory);
         player.openInventory(inventory);
+
         sender.playSound(sender.getEyeLocation(), Sound.CLICK, 100 , 1);
         Main.MESSENGER.message("Du hast die Herausforderung §aangenommen§7.", sender);
         return false;
