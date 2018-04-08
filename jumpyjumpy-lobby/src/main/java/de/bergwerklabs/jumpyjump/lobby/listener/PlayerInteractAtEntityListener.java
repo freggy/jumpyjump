@@ -13,6 +13,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -60,7 +61,7 @@ public class PlayerInteractAtEntityListener extends LobbyListener {
         final Tuple<UUID, Long> requested = MapSelectSession.REQUESTS.get(player.getUniqueId());
 
         if (requested != null) {
-            Main.MESSENGER.message("§cDu hast bereits jemanden herausgefordert. Warte §b10 §cSekunden.", player);
+            Main.MESSENGER.message("Warte §b10 Sekunden §7bevor du erneut Herausforderst.", player);
             return;
         }
 
@@ -74,8 +75,12 @@ public class PlayerInteractAtEntityListener extends LobbyListener {
         other.sendMessage("");
         // TODO: use Rankcolor
         // TODO: use UTF-8 "|" EVERYWHERE!!
-        Main.MESSENGER.message("§b" + player.getDisplayName() + " §bfordert dich heraus!", other);
-        BaseComponent[] message = new ComponentBuilder("        ")
+        String firstMessage = "§b" + player.getDisplayName() + " §bfordert dich heraus!";
+        Main.MESSENGER.message(firstMessage, other);
+
+        String centered = StringUtils.center("", firstMessage.length() / 4);
+
+        BaseComponent[] message = new ComponentBuilder(centered)
                 .append("[ANNEHMEN]").color(ChatColor.GREEN).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cacpt " + player.getName()))
                 .append(" | ").color(ChatColor.GOLD)
                 .append("[ABLEHNEN]").color(ChatColor.RED).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cdny "+ player.getName()))
@@ -83,7 +88,9 @@ public class PlayerInteractAtEntityListener extends LobbyListener {
         other.spigot().sendMessage(message);
         other.sendMessage("");
         other.playSound(other.getEyeLocation(), Sound.LEVEL_UP, 100 ,1);
-        MapSelectSession.REQUESTS.putIfAbsent(player.getUniqueId(), new Tuple<>(other.getUniqueId(), System.currentTimeMillis()));
+        player.playSound(other.getEyeLocation(), Sound.CLICK, 100 ,1);
+        Main.MESSENGER.message("Du hast §b" + other.getDisplayName() + " §7herausgefordert.", player);
+        MapSelectSession.REQUESTS.put(player.getUniqueId(), new Tuple<>(other.getUniqueId(), System.currentTimeMillis()));
     }
 
 }

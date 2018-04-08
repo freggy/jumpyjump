@@ -32,7 +32,7 @@ public class ChallengeAcceptCommand implements CommandExecutor {
         if (args.length == 0) return false;
         Player sender = (Player)commandSender;
         String playerName = args[0];
-        Player player =  Bukkit.getPlayer(playerName);
+        Player player = Bukkit.getPlayer(playerName);
 
 
         if (player == null) {
@@ -42,12 +42,18 @@ public class ChallengeAcceptCommand implements CommandExecutor {
 
         final Tuple<UUID, Long> requested = MapSelectSession.REQUESTS.get(player.getUniqueId());
 
-        if  (requested != null && !requested.getValue1().equals(sender.getUniqueId())) {
-            Main.MESSENGER.message("§cDieser Spieler muss dich erst herausfordern.", sender);
+        if (requested == null) {
+            Main.MESSENGER.message("§cDie Anfrage ist abgelaufen.", sender);
             return false;
         }
 
-        MapSelectSession.REQUESTS.remove(player.getUniqueId());
+        if  (!requested.getValue1().equals(sender.getUniqueId())) {
+            Main.MESSENGER.message("§cDieser Spieler muss dich erst herausfordern.", sender);
+            System.out.println("awdawd");
+            return false;
+        }
+
+        MapSelectSession.REQUESTS.put(player.getUniqueId(), new Tuple<>(null, null));
         final MapSelectSession session = new MapSelectSession(player, sender);
         MapSelectSession.SESSIONS.put(player.getUniqueId(), session);
         final Inventory inventory = this.createInventory();

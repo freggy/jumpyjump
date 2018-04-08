@@ -36,7 +36,12 @@ public class ChallengeDenyCommand implements CommandExecutor {
 
         final Tuple<UUID, Long> requested = MapSelectSession.REQUESTS.get(player.getUniqueId());
 
-        if  (requested != null && !requested.getValue1().equals(sender.getUniqueId())) {
+        if (requested == null) {
+            Main.MESSENGER.message("§cDie Anfrage ist abgelaufen.", sender);
+            return false;
+        }
+
+        if (!requested.getValue1().equals(sender.getUniqueId())) {
             Main.MESSENGER.message("§cDieser Spieler muss dich erst herausfordern.", sender);
             return false;
         }
