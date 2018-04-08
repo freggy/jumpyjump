@@ -1,15 +1,13 @@
 package de.bergwerklabs.jumpyjump.lobby.listener;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Range;
 import de.bergwerklabs.framework.commons.spigot.item.ItemStackBuilder;
 import de.bergwerklabs.jumpyjump.api.Difficulty;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpMap;
 import de.bergwerklabs.jumpyjump.lobby.LobbyMapManager;
 import de.bergwerklabs.jumpyjump.lobby.Main;
-import de.bergwerklabs.jumpyjump.lobby.MapSelectSession;
+import de.bergwerklabs.jumpyjump.lobby.MapSession;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
-import org.apache.commons.lang.math.IntRange;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -22,9 +20,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.lang.management.PlatformLoggingMXBean;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -84,7 +80,7 @@ public class InventoryClickListener extends LobbyListener {
 
     private void handleMapSelection(InventoryClickEvent event) {
         final HumanEntity player = event.getWhoClicked();
-        final MapSelectSession session = MapSelectSession.SESSIONS.get(player.getUniqueId());
+        final MapSession session = MapSession.SESSIONS.get(player.getUniqueId());
         final ItemStack item = event.getCurrentItem();
 
         if (item == null || item.getType() != Material.EMPTY_MAP) {
@@ -107,7 +103,7 @@ public class InventoryClickListener extends LobbyListener {
     private void createAndShowMapInventory(Player player, Collection<JumpyJumpMap> maps) {
         Inventory inventory = this.createMapSelectionInventory(player, maps);
         player.playSound(player.getEyeLocation(), Sound.CLICK, 100 , 1);
-        MapSelectSession.SESSIONS.get(player.getUniqueId()).setOpenInventory(inventory);
+        MapSession.SESSIONS.get(player.getUniqueId()).setOpenInventory(inventory);
         player.openInventory(inventory);
     }
 

@@ -1,8 +1,6 @@
 package de.bergwerklabs.jumpyjump.lobby.listener;
 
-import de.bergwerklabs.framework.commons.misc.Tuple;
 import de.bergwerklabs.jumpyjump.lobby.LobbyMapManager;
-import de.bergwerklabs.jumpyjump.lobby.MapSelectSession;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

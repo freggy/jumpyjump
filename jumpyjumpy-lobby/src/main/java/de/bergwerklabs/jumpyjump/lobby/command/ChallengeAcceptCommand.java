@@ -4,7 +4,7 @@ import de.bergwerklabs.framework.commons.misc.Tuple;
 import de.bergwerklabs.framework.commons.spigot.item.ItemStackBuilder;
 import de.bergwerklabs.jumpyjump.api.Difficulty;
 import de.bergwerklabs.jumpyjump.lobby.Main;
-import de.bergwerklabs.jumpyjump.lobby.MapSelectSession;
+import de.bergwerklabs.jumpyjump.lobby.MapSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.security.acl.LastOwnerException;
 import java.util.UUID;
 
 /**
@@ -40,7 +39,7 @@ public class ChallengeAcceptCommand implements CommandExecutor {
             return false;
         }
 
-        final Tuple<UUID, Long> requested = MapSelectSession.REQUESTS.get(player.getUniqueId());
+        final Tuple<UUID, Long> requested = MapSession.REQUESTS.get(player.getUniqueId());
 
         if (requested == null) {
             Main.MESSENGER.message("§cDie Anfrage ist abgelaufen.", sender);
@@ -53,9 +52,9 @@ public class ChallengeAcceptCommand implements CommandExecutor {
             return false;
         }
 
-        MapSelectSession.REQUESTS.remove(player.getUniqueId());
-        final MapSelectSession session = new MapSelectSession(player, sender);
-        MapSelectSession.SESSIONS.put(player.getUniqueId(), session);
+        MapSession.REQUESTS.remove(player.getUniqueId());
+        final MapSession session = new MapSession(player, sender);
+        MapSession.SESSIONS.put(player.getUniqueId(), session);
         final Inventory inventory = this.createInventory();
         session.setOpenInventory(inventory);
         player.openInventory(inventory);

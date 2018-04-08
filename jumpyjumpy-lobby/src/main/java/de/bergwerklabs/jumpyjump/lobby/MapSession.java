@@ -3,7 +3,6 @@ package de.bergwerklabs.jumpyjump.lobby;
 import de.bergwerklabs.framework.commons.misc.Tuple;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import sun.misc.resources.Messages_pt_BR;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,9 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Yannic Rieger
  */
-public class MapSelectSession {
+public class MapSession {
 
-    public static final Map<UUID, MapSelectSession> SESSIONS = new HashMap<>();
+    public static final Map<UUID, MapSession> SESSIONS = new HashMap<>();
     public static final Map<UUID, Tuple<UUID, Long>> REQUESTS = new ConcurrentHashMap<>();
 
     private Inventory openInventory;
@@ -26,8 +25,8 @@ public class MapSelectSession {
     private Player challenged;
     private String requestedMapId;
 
-    public MapSelectSession(Player challenger, Player challenged) {
-        MapSelectSession.SESSIONS.put(challenger.getUniqueId(), this);
+    public MapSession(Player challenger, Player challenged) {
+        MapSession.SESSIONS.put(challenger.getUniqueId(), this);
         this.challenger = challenger;
         this.challenged = challenged;
     }

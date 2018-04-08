@@ -2,7 +2,7 @@ package de.bergwerklabs.jumpyjump.lobby.command;
 
 import de.bergwerklabs.framework.commons.misc.Tuple;
 import de.bergwerklabs.jumpyjump.lobby.Main;
-import de.bergwerklabs.jumpyjump.lobby.MapSelectSession;
+import de.bergwerklabs.jumpyjump.lobby.MapSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -34,7 +34,7 @@ public class ChallengeDenyCommand implements CommandExecutor {
             return false;
         }
 
-        final Tuple<UUID, Long> requested = MapSelectSession.REQUESTS.get(player.getUniqueId());
+        final Tuple<UUID, Long> requested = MapSession.REQUESTS.get(player.getUniqueId());
 
         if (requested == null) {
             Main.MESSENGER.message("§cDie Anfrage ist abgelaufen.", sender);
@@ -48,7 +48,7 @@ public class ChallengeDenyCommand implements CommandExecutor {
 
         Main.MESSENGER.message("§b" + sender.getDisplayName() + " §7hat deine Herausforderung §cabgelehnt.", player);
         Main.MESSENGER.message("Du hast die Herausforderung §cabgelehnt§7.", sender);
-        MapSelectSession.REQUESTS.remove(player.getUniqueId());
+        MapSession.REQUESTS.remove(player.getUniqueId());
         player.playSound(player.getEyeLocation(), Sound.NOTE_BASS, 50, 50);
         sender.playSound(sender.getEyeLocation(), Sound.CLICK, 100 , 1);
         return false;

@@ -2,7 +2,6 @@ package de.bergwerklabs.jumpyjump.lobby;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import de.bergwerklabs.framework.commons.misc.Tuple;
 import de.bergwerklabs.framework.commons.spigot.chat.messenger.PluginMessenger;
 import de.bergwerklabs.jumpyjump.lobby.command.ChallengeAcceptCommand;
 import de.bergwerklabs.jumpyjump.lobby.command.ChallengeDenyCommand;
@@ -43,12 +42,12 @@ public class Main extends JavaPlugin {
         this.mapManager = new LobbyMapManager(null, null, null);
         this.registerListeners();
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
-            MapSelectSession.REQUESTS.forEach((key, value) -> {
+            MapSession.REQUESTS.forEach((key, value) -> {
                 Long requested = value.getValue2();
                 if (requested != null) { // can occur if the players are in a session
                     if ((System.currentTimeMillis() - requested) <= TimeUnit.SECONDS.toMillis(10)) {
                         Bukkit.getLogger().info("Remove entry");
-                        MapSelectSession.REQUESTS.remove(key);
+                        MapSession.REQUESTS.remove(key);
                     }
                 }
             });
