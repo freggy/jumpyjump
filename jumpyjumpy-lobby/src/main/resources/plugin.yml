@@ -3,3 +3,6 @@ author: freggy
 version: 1.0
 main: de.bergwerklabs.jumpyjump.lobby.Main
 depend: [SpigotCommons]
+commands:
+    cacpt:
+    cdny:

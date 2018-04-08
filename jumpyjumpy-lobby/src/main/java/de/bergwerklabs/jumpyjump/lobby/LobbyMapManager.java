@@ -51,15 +51,14 @@ public class LobbyMapManager {
         );
     }
 
-    public Set<JumpyJumpMap> getHardMaps() {
-        return Collections.singleton(new JumpyJumpMap(
-                new HashSet<>(Arrays.asList("SirCryme", "Frakelz")),
-                null,
-                null,
-                null,
-                "HARD_MAP",
-                Difficulty.HARD,
-                true)
-        );
+    public List<JumpyJumpMap> getHardMaps() {
+
+        JumpyJumpMap map = new JumpyJumpMap(new HashSet<>(Arrays.asList("SirCryme", "Frakelz")), null, null, null, "HARD_MAP", Difficulty.HARD, true);
+
+
+
+
+        return Arrays.asList(map, map, map, map, map, map, map, map ,map, map, map, map, map, map, map,
+                                           map, map, map, map, map, map, map, map);
     }
 }

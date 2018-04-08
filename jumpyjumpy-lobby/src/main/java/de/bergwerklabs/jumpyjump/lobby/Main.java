@@ -3,7 +3,10 @@ package de.bergwerklabs.jumpyjump.lobby;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.bergwerklabs.framework.commons.spigot.chat.messenger.PluginMessenger;
+import de.bergwerklabs.jumpyjump.lobby.command.ChallengeAcceptCommand;
+import de.bergwerklabs.jumpyjump.lobby.command.ChallengeDenyCommand;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
+import de.bergwerklabs.jumpyjump.lobby.config.ConfigDeserializer;
 import de.bergwerklabs.jumpyjump.lobby.config.ConfigSerializer;
 import de.bergwerklabs.jumpyjump.lobby.listener.*;
 import org.bukkit.Bukkit;
@@ -12,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
@@ -23,6 +27,7 @@ import java.util.logging.Logger;
 public class Main extends JavaPlugin {
 
     public static Main getInstance() { return instance; }
+
     public static final PluginMessenger MESSENGER = new PluginMessenger("Lobby");
 
     private static Main instance;
@@ -36,6 +41,18 @@ public class Main extends JavaPlugin {
         this.setUpConfig();
         this.mapManager = new LobbyMapManager(null, null, null);
         this.registerListeners();
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
+            MapSelectSession.REQUESTS.forEach((key, value) -> {
+                long requested = value.getValue2();
+                if ((System.currentTimeMillis() - requested) <= TimeUnit.SECONDS.toMillis(10)) {
+                    Bukkit.getLogger().info("Remove entry");
+                    MapSelectSession.REQUESTS.remove(key);
+                }
+            });
+        }, 20, 20 * 10); // TODO: make configurable
+
+        this.getCommand("cacpt").setExecutor(new ChallengeAcceptCommand());
+        this.getCommand("cdny").setExecutor(new ChallengeDenyCommand());
     }
 
     private void registerListeners() {
@@ -45,15 +62,13 @@ public class Main extends JavaPlugin {
         manager.registerEvents(new InventoryCloseListener(), this);
         manager.registerEvents(new InventoryClickListener(this.config, this.mapManager), this);
         manager.registerEvents(new CancelListener(), this);
-        manager.registerEvents(new PlayerDropItemListener(), this);
-
     }
 
     private void setUpConfig() {
         File configFile = new File(this.getDataFolder().getAbsolutePath() + "/config.json");
         Gson gson = new GsonBuilder().setPrettyPrinting()
                                      .registerTypeAdapter(Config.class, new ConfigSerializer())
-                                     //.registerTypeAdapter(Config.class, new ConfigDeserializer())
+                                     .registerTypeAdapter(Config.class, new ConfigDeserializer())
                                      .create();
 
         try {
@@ -73,7 +88,12 @@ public class Main extends JavaPlugin {
             }
             else {
                 LOGGER.info("Config found, reading it...");
-                this.config = gson.fromJson(new FileReader(configFile), Config.class);
+                try (InputStreamReader reader = new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8)) {
+                    this.config = gson.fromJson(reader, Config.class);
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
         catch (Exception ex) {
