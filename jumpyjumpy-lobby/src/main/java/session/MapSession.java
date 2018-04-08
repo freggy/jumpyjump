@@ -3,6 +3,8 @@ package session;
 import de.bergwerklabs.framework.commons.misc.Tuple;
 import de.bergwerklabs.jumpyjump.lobby.LobbyPlayer;
 import de.bergwerklabs.jumpyjump.lobby.Main;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;
@@ -18,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MapSession {
 
-    public static final Map<UUID, MapSession> SESSIONS        = new HashMap<>();
     public static final Map<UUID, Tuple<UUID, Long>> REQUESTS = new ConcurrentHashMap<>();
 
     public int getPriority() {
@@ -32,7 +33,6 @@ public class MapSession {
     private int priority;
 
     public MapSession(LobbyPlayer challenger, LobbyPlayer challenged) {
-        MapSession.SESSIONS.put(challenger.getPlayer().getUniqueId(), this);
         this.challenger = challenger;
         this.challenged = challenged;
         this.priority = this.challenger.getPriority() + this.challenged.getPriority();
@@ -63,10 +63,19 @@ public class MapSession {
         this.openInventory = openInventory;
     }
 
-    public static boolean isInSession(UUID uuid) {
-        return MapSession.SESSIONS
-                .values()
-                .stream()
-                .anyMatch(session -> session.getChallenged().getPlayer().getUniqueId().equals(uuid));
+    public void close() {
+        final Player challengedPlayer = this.challenged.getPlayer();
+        final Player challengerPlayer = this.challenger.getPlayer();
+
+        Main.MESSENGER.message("Die Session wurde §cbeendet§7.", challengedPlayer);
+        Main.MESSENGER.message("Die Session wurde §cbeendet§7.", challengerPlayer);
+
+        challengedPlayer.playSound(challengedPlayer.getEyeLocation(), Sound.NOTE_BASS, 50, 50);
+        challengerPlayer.getPlayer().playSound(challengerPlayer.getEyeLocation(), Sound.NOTE_BASS, 50, 50);
+
+        this.challenged.setMapSession(null);
+        this.challenger.setMapSession(null);
+
+        challengerPlayer.closeInventory();
     }
 }

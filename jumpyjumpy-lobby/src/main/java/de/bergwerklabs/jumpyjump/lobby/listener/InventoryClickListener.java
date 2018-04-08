@@ -5,6 +5,7 @@ import de.bergwerklabs.framework.commons.spigot.item.ItemStackBuilder;
 import de.bergwerklabs.jumpyjump.api.Difficulty;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpMap;
 import de.bergwerklabs.jumpyjump.lobby.LobbyMapManager;
+import de.bergwerklabs.jumpyjump.lobby.LobbyPlayer;
 import de.bergwerklabs.jumpyjump.lobby.Main;
 import session.MapSession;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
@@ -80,7 +81,8 @@ public class InventoryClickListener extends LobbyListener {
 
     private void handleMapSelection(InventoryClickEvent event) {
         final HumanEntity player = event.getWhoClicked();
-        final MapSession session = MapSession.SESSIONS.get(player.getUniqueId());
+        final LobbyPlayer lobbyPlayer = Main.LOBBY_PLAYERS.get(player.getUniqueId());
+        final MapSession session = lobbyPlayer.getMapSession();
         final ItemStack item = event.getCurrentItem();
 
         if (item == null || item.getType() != Material.EMPTY_MAP) {
@@ -93,17 +95,20 @@ public class InventoryClickListener extends LobbyListener {
         final String mapName = meta.getDisplayName().replace("§e", "");
 
         String id = lore.get(2).replace("§7", "");
-        player.closeInventory();
 
         this.displaySelectedMap((Player)player, lore, mapName);
         this.displaySelectedMap(session.getChallenged().getPlayer(), lore, mapName);
         session.requestMapServer(id);
+
+        // close inventory at last because otherwise the second check in
+        // InventoryCloseListener#onInventoryClose would fail and cause bugs.
+        player.closeInventory();
     }
 
     private void createAndShowMapInventory(Player player, Collection<JumpyJumpMap> maps) {
         Inventory inventory = this.createMapSelectionInventory(player, maps);
         player.playSound(player.getEyeLocation(), Sound.CLICK, 100 , 1);
-        MapSession.SESSIONS.get(player.getUniqueId()).setOpenInventory(inventory);
+        Main.LOBBY_PLAYERS.get(player.getUniqueId()).getMapSession().setOpenInventory(inventory);
         player.openInventory(inventory);
     }
 

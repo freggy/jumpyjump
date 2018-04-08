@@ -3,6 +3,7 @@ package de.bergwerklabs.jumpyjump.lobby;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import session.MapSession;
 import session.QuickJoinSession;
 
 /**
@@ -21,9 +22,27 @@ public class LobbyPlayer  {
         return priority;
     }
 
+    public long getLastQueueLeave() {
+        return lastQueueLeave;
+    }
+
+    public boolean isQueued() {
+        return this.mapSession != null || this.quickJoinSession != null;
+    }
+
+    public MapSession getMapSession() {
+        return mapSession;
+    }
+
+    public void setMapSession(MapSession mapSession) {
+        this.mapSession = mapSession;
+    }
+
     private Player player;
     private QuickJoinSession quickJoinSession;
+    private MapSession mapSession;
     private int priority;
+    private long lastQueueLeave;
 
     public LobbyPlayer(Player player) {
         this.player = player;
@@ -39,6 +58,8 @@ public class LobbyPlayer  {
     }
 
     public void leaveQuickJoinQueue() {
+        this.lastQueueLeave = System.currentTimeMillis();
+        this.quickJoinSession = null;
         final Inventory inventory = this.player.getInventory();
         final Config config = Main.getInstance().getLobbyConfig();
         inventory.setItem(2, config.getChallengeItem());

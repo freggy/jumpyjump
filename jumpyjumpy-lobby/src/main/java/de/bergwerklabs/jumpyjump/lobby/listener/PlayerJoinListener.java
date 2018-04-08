@@ -1,9 +1,12 @@
 package de.bergwerklabs.jumpyjump.lobby.listener;
 
+import de.bergwerklabs.framework.commons.spigot.entity.npc.PlayerSkin;
+import de.bergwerklabs.framework.commons.spigot.nms.NmsUtil;
 import de.bergwerklabs.jumpyjump.lobby.LobbyMapManager;
 import de.bergwerklabs.jumpyjump.lobby.LobbyPlayer;
 import de.bergwerklabs.jumpyjump.lobby.Main;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
+import de.bergwerklabs.util.NPC;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,21 +37,26 @@ public class PlayerJoinListener extends LobbyListener {
         inventory.setItem(4, this.config.getQuickJoinItem());
         inventory.setItem(6, this.config.getLobbyItem());
         player.setGameMode(GameMode.ADVENTURE);
+        event.setJoinMessage("§b" + player.getDisplayName() + " §7hat die Lobby §abetreten.");
         Main.LOBBY_PLAYERS.putIfAbsent(player.getUniqueId(), new LobbyPlayer(player));
 
         try {
-            Main.quickJoin.spawn(player);
+            PlayerSkin skin = PlayerSkin.fromPlayer(player);
+            this.config.getQuickJoinNpc().spawn(player);
+            NPC statsNpc = new NPC(
+                    "",
+                    "",
+                    false,
+                    false,
+                    this.config.getStatsNpcLocation()
+            );
+            // TODO: add stats above NPC
+            statsNpc.setSinglePlayerNpc(true);
+            statsNpc.setShouldSee(player);
+            statsNpc.spawn(player);
+            statsNpc.updateSkin(skin.getValue(), skin.getSignature());
         }
-        catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-        catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        catch (NoSuchMethodException e) {
+        catch (Exception e) {
             e.printStackTrace();
         }
     }

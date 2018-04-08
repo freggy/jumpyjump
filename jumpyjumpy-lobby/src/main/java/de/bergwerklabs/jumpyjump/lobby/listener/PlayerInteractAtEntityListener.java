@@ -2,6 +2,7 @@ package de.bergwerklabs.jumpyjump.lobby.listener;
 
 import de.bergwerklabs.framework.commons.misc.Tuple;
 import de.bergwerklabs.jumpyjump.lobby.LobbyMapManager;
+import de.bergwerklabs.jumpyjump.lobby.LobbyPlayer;
 import de.bergwerklabs.jumpyjump.lobby.Main;
 import session.MapSession;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
@@ -35,11 +36,11 @@ public class PlayerInteractAtEntityListener extends LobbyListener {
         if (player.getItemInHand().getType() != this.config.getChallengeItem().getType()) return;
         final Player other = (Player) event.getRightClicked();
 
-        boolean selfSessioned = MapSession.isInSession(player.getUniqueId());
-        boolean otherSessioned = MapSession.isInSession(other.getUniqueId());
+        final LobbyPlayer self = Main.LOBBY_PLAYERS.get(player.getUniqueId());
+        final LobbyPlayer otherLobbyPlayer = Main.LOBBY_PLAYERS.get(other.getUniqueId());
 
-        if (selfSessioned || otherSessioned) {
-            Main.MESSENGER.message("§cHerausfordern ist nicht möglich.", player);
+        if (otherLobbyPlayer.isQueued() || self.isQueued()) {
+            Main.MESSENGER.message("§cDieser Spieler wird bereits herausgefordert.", player);
             return;
         }
 
@@ -50,9 +51,7 @@ public class PlayerInteractAtEntityListener extends LobbyListener {
             return;
         }
 
-        final MapSession potenial = MapSession.SESSIONS.get(other.getUniqueId());
-
-        if (potenial != null) {
+        if (otherLobbyPlayer.isQueued()) {
             Main.MESSENGER.message("§cDieser Spieler fordert dich bereits heraus.", player);
             return;
         }

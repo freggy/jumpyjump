@@ -57,9 +57,10 @@ public class ChallengeAcceptCommand implements CommandExecutor {
 
         final LobbyPlayer challenger = Main.LOBBY_PLAYERS.get(player.getUniqueId());
         final LobbyPlayer challenged = Main.LOBBY_PLAYERS.get(sender.getUniqueId());
-
         final MapSession session = new MapSession(challenger, challenged);
-        MapSession.SESSIONS.put(player.getUniqueId(), session);
+
+        challenged.setMapSession(session);
+        challenger.setMapSession(session);
 
         final Inventory inventory = this.createInventory();
         session.setOpenInventory(inventory);

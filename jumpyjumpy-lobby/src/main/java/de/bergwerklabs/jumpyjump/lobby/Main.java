@@ -46,9 +46,6 @@ public class Main extends JavaPlugin {
     private Config config = Config.DEFAULT_CONFIG;
     private LobbyMapManager mapManager;
 
-    public static NPC quickJoin;
-
-
     @Override
     public void onEnable() {
         instance = this;
@@ -69,17 +66,6 @@ public class Main extends JavaPlugin {
 
         this.getCommand("cacpt").setExecutor(new ChallengeAcceptCommand());
         this.getCommand("cdny").setExecutor(new ChallengeDenyCommand());
-
-        // -86 77 146
-
-        try {
-            quickJoin = new NPC("§a§lQuick Join", "§7§oSchlag' mich", true, true,
-                              new Location(Bukkit.getWorld("world"), -86, 78, 146));
-        }
-        catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void registerListeners() {

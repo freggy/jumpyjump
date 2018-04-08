@@ -1,7 +1,9 @@
 package de.bergwerklabs.jumpyjump.lobby.config;
 
 import de.bergwerklabs.framework.commons.spigot.item.ItemStackBuilder;
+import de.bergwerklabs.util.NPC;
 import jdk.nashorn.internal.runtime.arrays.IteratorAction;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,13 +30,25 @@ public class Config {
             .setName("§c§lVerlasse §a§lQuickJoin§r §7<Rechtsklick>")
             .create();
 
+    private NPC quickJoinNpc;
+    private Location statsNpcLocation;
+
     private Config() {}
 
-    Config(ItemStack challengeItem, ItemStack lobbyItem, ItemStack quickJoinItem, ItemStack leaveQuickJoin) {
+    Config(
+            ItemStack challengeItem,
+            ItemStack lobbyItem,
+            ItemStack quickJoinItem,
+            ItemStack leaveQuickJoin,
+            Location statsNpcLocation,
+            NPC quickJoinNpc
+    ) {
         this.challengeItem = challengeItem;
         this.lobbyItem = lobbyItem;
         this.quickJoinItem = quickJoinItem;
         this.leaveQuickJoin = leaveQuickJoin;
+        this.quickJoinNpc = quickJoinNpc;
+        this.statsNpcLocation = statsNpcLocation;
     }
 
     public ItemStack getChallengeItem() {
@@ -50,4 +64,12 @@ public class Config {
     }
 
     public ItemStack getLeaveQuickJoin() { return leaveQuickJoin; }
+
+    public NPC getQuickJoinNpc() {
+        return quickJoinNpc;
+    }
+
+    public Location getStatsNpcLocation() {
+        return statsNpcLocation;
+    }
 }
