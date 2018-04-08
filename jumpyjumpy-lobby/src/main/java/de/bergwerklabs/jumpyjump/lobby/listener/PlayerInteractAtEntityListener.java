@@ -3,7 +3,7 @@ package de.bergwerklabs.jumpyjump.lobby.listener;
 import de.bergwerklabs.framework.commons.misc.Tuple;
 import de.bergwerklabs.jumpyjump.lobby.LobbyMapManager;
 import de.bergwerklabs.jumpyjump.lobby.Main;
-import de.bergwerklabs.jumpyjump.lobby.MapSession;
+import session.MapSession;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;

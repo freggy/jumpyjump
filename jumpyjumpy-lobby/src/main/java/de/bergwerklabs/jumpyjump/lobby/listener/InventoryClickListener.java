@@ -6,7 +6,7 @@ import de.bergwerklabs.jumpyjump.api.Difficulty;
 import de.bergwerklabs.jumpyjump.api.JumpyJumpMap;
 import de.bergwerklabs.jumpyjump.lobby.LobbyMapManager;
 import de.bergwerklabs.jumpyjump.lobby.Main;
-import de.bergwerklabs.jumpyjump.lobby.MapSession;
+import session.MapSession;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;

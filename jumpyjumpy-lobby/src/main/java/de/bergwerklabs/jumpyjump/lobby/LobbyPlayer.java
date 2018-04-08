@@ -3,7 +3,7 @@ package de.bergwerklabs.jumpyjump.lobby;
 import de.bergwerklabs.jumpyjump.lobby.config.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import session.QuickJoinSession;
 
 /**
  * Created by Yannic Rieger on 08.04.2018.

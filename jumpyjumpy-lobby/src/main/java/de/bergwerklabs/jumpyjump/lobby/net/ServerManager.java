@@ -1,7 +1,7 @@
 package de.bergwerklabs.jumpyjump.lobby.net;
 
-import de.bergwerklabs.jumpyjump.lobby.MapSession;
-import de.bergwerklabs.jumpyjump.lobby.QuickJoinSession;
+import session.MapSession;
+import session.QuickJoinSession;
 
 import java.util.PriorityQueue;
 import java.util.Queue;

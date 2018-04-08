@@ -1,7 +1,8 @@
-package de.bergwerklabs.jumpyjump.lobby;
+package session;
 
 import de.bergwerklabs.framework.commons.misc.Tuple;
-import org.bukkit.entity.Player;
+import de.bergwerklabs.jumpyjump.lobby.LobbyPlayer;
+import de.bergwerklabs.jumpyjump.lobby.Main;
 import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;

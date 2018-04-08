@@ -1,6 +1,6 @@
 package de.bergwerklabs.jumpyjump.lobby.listener;
 
-import de.bergwerklabs.jumpyjump.lobby.MapSession;
+import session.MapSession;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;

@@ -5,7 +5,7 @@ import de.bergwerklabs.framework.commons.spigot.item.ItemStackBuilder;
 import de.bergwerklabs.jumpyjump.api.Difficulty;
 import de.bergwerklabs.jumpyjump.lobby.LobbyPlayer;
 import de.bergwerklabs.jumpyjump.lobby.Main;
-import de.bergwerklabs.jumpyjump.lobby.MapSession;
+import session.MapSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;

@@ -25,7 +25,7 @@ public class Config {
             .setName("§a§lQuickJoin§r §7<Rechtsklick>")
             .create();
     private ItemStack leaveQuickJoin = new ItemStackBuilder(Material.BARRIER)
-            .setName("§c§lVerlasse §aQuickJoin§r §7<Rechtsklick>")
+            .setName("§c§lVerlasse §a§lQuickJoin§r §7<Rechtsklick>")
             .create();
 
     private Config() {}

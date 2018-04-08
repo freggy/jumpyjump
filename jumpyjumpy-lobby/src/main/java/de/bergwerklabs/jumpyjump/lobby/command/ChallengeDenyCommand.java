@@ -2,7 +2,7 @@ package de.bergwerklabs.jumpyjump.lobby.command;
 
 import de.bergwerklabs.framework.commons.misc.Tuple;
 import de.bergwerklabs.jumpyjump.lobby.Main;
-import de.bergwerklabs.jumpyjump.lobby.MapSession;
+import session.MapSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;

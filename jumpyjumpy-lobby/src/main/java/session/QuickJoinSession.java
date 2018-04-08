@@ -1,4 +1,7 @@
-package de.bergwerklabs.jumpyjump.lobby;
+package session;
+
+import de.bergwerklabs.jumpyjump.lobby.LobbyPlayer;
+import de.bergwerklabs.jumpyjump.lobby.Main;
 
 import java.util.UUID;
 
