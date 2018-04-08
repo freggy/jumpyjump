@@ -53,7 +53,7 @@ public class ChallengeAcceptCommand implements CommandExecutor {
             return false;
         }
 
-        MapSelectSession.REQUESTS.put(player.getUniqueId(), new Tuple<>(null, null));
+        MapSelectSession.REQUESTS.remove(player.getUniqueId());
         final MapSelectSession session = new MapSelectSession(player, sender);
         MapSelectSession.SESSIONS.put(player.getUniqueId(), session);
         final Inventory inventory = this.createInventory();
