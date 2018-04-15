@@ -4,6 +4,8 @@ import de.bergwerklabs.jumpyjump.lobby.LobbyPlayer;
 import de.bergwerklabs.jumpyjump.lobby.Main;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventPriority;
 import session.MapSession;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +21,7 @@ import java.util.UUID;
  */
 public class InventoryCloseListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     private void onInventoryClose(InventoryCloseEvent event) {
         final Player player = (Player)event.getPlayer();
         final LobbyPlayer lobbyPlayer = Main.LOBBY_PLAYERS.get(player.getUniqueId());
