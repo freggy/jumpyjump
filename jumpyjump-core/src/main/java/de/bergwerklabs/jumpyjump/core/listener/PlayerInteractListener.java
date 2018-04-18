@@ -10,7 +10,6 @@ import de.bergwerklabs.jumpyjump.api.JumpyJumpPlayer;
 import de.bergwerklabs.jumpyjump.api.WinResult;
 import de.bergwerklabs.jumpyjump.api.event.CheckpointReachedEvent;
 import de.bergwerklabs.jumpyjump.api.event.JumpyJumpWinEvent;
-import de.bergwerklabs.jumpyjump.core.Common;
 import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,104 +22,118 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 
 /**
  * Created by Yannic Rieger on 02.04.2018.
+ *
  * <p>
  *
  * @author Yannic Rieger
  */
 public class PlayerInteractListener extends JumpyJumpListener {
 
-    public PlayerInteractListener(JumpyJumpSession session) {
-        super(session);
-    }
+  public PlayerInteractListener(JumpyJumpSession session) {
+    super(session);
+  }
 
-    @EventHandler
-    private void onPlayerInteract(PlayerInteractEvent event) {
-        if (this.game.isFinished()) return;
-        final Player player = event.getPlayer();
-        final Block block = event.getClickedBlock();
-        if (block == null) return;
-        final Material material = block.getType();
+  @EventHandler
+  private void onPlayerInteract(PlayerInteractEvent event) {
+    if (this.game.isFinished()) return;
+    final Player player = event.getPlayer();
+    final Block block = event.getClickedBlock();
+    if (block == null) return;
+    final Material material = block.getType();
 
-        final JumpyJumpPlayer jumpyJumpPlayer = JumpyJumpSession.getInstance().getPlayer(player.getUniqueId());
-        final Vector blockLocationVector = block.getLocation().toVector();
-        final Location currentCheckpoint = jumpyJumpPlayer.getCurrentCheckpoint();
-        final Location nextCheckpoint = jumpyJumpPlayer.getCourse().inspectNextCheckpoint();
-        final Collection<JumpyJumpPlayer> players = JumpyJumpSession.getInstance().getRegistry().getPlayers().values();
+    final JumpyJumpPlayer jumpyJumpPlayer =
+        JumpyJumpSession.getInstance().getPlayer(player.getUniqueId());
+    final Vector blockLocationVector = block.getLocation().toVector();
+    final Location currentCheckpoint = jumpyJumpPlayer.getCurrentCheckpoint();
+    final Location nextCheckpoint = jumpyJumpPlayer.getCourse().inspectNextCheckpoint();
+    final Collection<JumpyJumpPlayer> players =
+        JumpyJumpSession.getInstance().getRegistry().getPlayers().values();
 
-        if (event.getAction() == Action.PHYSICAL) {
+    if (event.getAction() == Action.PHYSICAL) {
 
-            // Return if its not a checkpoint-pressure-plate.
-            if (!nextCheckpoint.toVector().equals(blockLocationVector)) {
-                event.setCancelled(true);
-                return;
-            }
+      // Return if its not a checkpoint-pressure-plate.
+      if (!nextCheckpoint.toVector().equals(blockLocationVector)) {
+        event.setCancelled(true);
+        return;
+      }
 
-            if (this.map.getCheckpointMaterial().contains(material) && (currentCheckpoint == null || !currentCheckpoint.toVector().equals(blockLocationVector))) {
-                final Location checkpoint = jumpyJumpPlayer.getCourse().pollNextCheckpoint();
-                jumpyJumpPlayer.setCurrentCheckpoint(checkpoint);
+      if (this.map.getCheckpointMaterial().contains(material)
+          && (currentCheckpoint == null
+              || !currentCheckpoint.toVector().equals(blockLocationVector))) {
+        final Location checkpoint = jumpyJumpPlayer.getCourse().pollNextCheckpoint();
+        jumpyJumpPlayer.setCurrentCheckpoint(checkpoint);
 
-                player.playSound(player.getEyeLocation(), Sound.LEVEL_UP, 100, 10);
-                player.setLevel(player.getLevel() + 1);
-                final int checkpointIndex = player.getLevel();
-                final PluginMessenger messenger =  JumpyJumpSession.getInstance().getGame().getMessenger();
+        player.playSound(player.getEyeLocation(), Sound.LEVEL_UP, 100, 10);
+        player.setLevel(player.getLevel() + 1);
+        final int checkpointIndex = player.getLevel();
+        final PluginMessenger messenger = JumpyJumpSession.getInstance().getGame().getMessenger();
 
-                // TODO: add rank colors.
-                players.stream()
-                        .filter(p -> !p.getUuid().equals(player.getUniqueId()))
-                        .map(LabsPlayer::getPlayer)
-                        .forEach(p -> {
-                            String msg = player.getDisplayName() + " hat Checkpoint §b" + checkpointIndex + " §7erreicht.";
-                            p.playSound(p.getEyeLocation(), Sound.ANVIL_LAND, 100, 10);
-                            messenger.message(msg, p);
-                        });
-
-                messenger.message("Du hast Checkpoint §b" + checkpointIndex + " §7erreicht.", player);
-
-                JumpyJumpSession.getInstance().getRegistry().getPlayers().values().forEach(jumpPlayer -> {
-                    final Vector pos = checkpoint.clone().add(0.5, 0, 0.5).toVector();
-                    ParticleUtil.spawnParticle(
-                            player,
-                            EnumWrappers.Particle.VILLAGER_HAPPY,
-                            25,
-                            new Vector3F((float) pos.getX(), (float) pos.getY(), (float) pos.getZ()),
-                            new Vector3F(.5F, .4F, .5F),
-                            2F,
-                            false
-                    );
-                });
-                Bukkit.getPluginManager().callEvent(new CheckpointReachedEvent(jumpyJumpPlayer, this.map, checkpoint));
-            }
-
-            if (material == Material.GOLD_PLATE) {
-                long elapsed = System.currentTimeMillis() - this.game.getStartTime();
-                WinResult result = new WinResult(elapsed);
-                Bukkit.getPluginManager().callEvent(new JumpyJumpWinEvent(jumpyJumpPlayer, this.map, result));
-
-                players.forEach(jumpPlayer -> {
-                    final Player spigotPlayer = jumpPlayer.getPlayer();
-                    // TODO: use rank color
-                    new Title("§7" + player.getDisplayName(), "§ehat das Spiel gewonnen", 40, 40, 40)
-                            .display(spigotPlayer);
-                    spigotPlayer.playSound(spigotPlayer.getEyeLocation(), Sound.WITHER_SPAWN, 10, 1);
+        // TODO: add rank colors.
+        players
+            .stream()
+            .filter(p -> !p.getUuid().equals(player.getUniqueId()))
+            .map(LabsPlayer::getPlayer)
+            .forEach(
+                p -> {
+                  String msg =
+                      player.getDisplayName()
+                          + " hat Checkpoint §b"
+                          + checkpointIndex
+                          + " §7erreicht.";
+                  p.playSound(p.getEyeLocation(), Sound.ANVIL_LAND, 100, 10);
+                  messenger.message(msg, p);
                 });
 
-                SimpleDateFormat sdf = new SimpleDateFormat("mm:ss.SSS");
-                String formatted = sdf.format(new Date(elapsed));
+        messenger.message("Du hast Checkpoint §b" + checkpointIndex + " §7erreicht.", player);
 
-                this.game.getMessenger().message("Deine Zeit: §b" + formatted, player);
-                this.game.stop();
-            }
-            event.setCancelled(true);
-        }
+        JumpyJumpSession.getInstance()
+            .getRegistry()
+            .getPlayers()
+            .values()
+            .forEach(
+                jumpPlayer -> {
+                  final Vector pos = checkpoint.clone().add(0.5, 0, 0.5).toVector();
+                  ParticleUtil.spawnParticle(
+                      player,
+                      EnumWrappers.Particle.VILLAGER_HAPPY,
+                      25,
+                      new Vector3F((float) pos.getX(), (float) pos.getY(), (float) pos.getZ()),
+                      new Vector3F(.5F, .4F, .5F),
+                      2F,
+                      false);
+                });
+        Bukkit.getPluginManager()
+            .callEvent(new CheckpointReachedEvent(jumpyJumpPlayer, this.map, checkpoint));
+      }
+
+      if (material == Material.GOLD_PLATE) {
+        long elapsed = System.currentTimeMillis() - this.game.getStartTime();
+        WinResult result = new WinResult(elapsed);
+        Bukkit.getPluginManager()
+            .callEvent(new JumpyJumpWinEvent(jumpyJumpPlayer, this.map, result));
+
+        players.forEach(
+            jumpPlayer -> {
+              final Player spigotPlayer = jumpPlayer.getPlayer();
+              // TODO: use rank color
+              new Title("§7" + player.getDisplayName(), "§ehat das Spiel gewonnen", 40, 40, 40)
+                  .display(spigotPlayer);
+              spigotPlayer.playSound(spigotPlayer.getEyeLocation(), Sound.WITHER_SPAWN, 10, 1);
+            });
+
+        SimpleDateFormat sdf = new SimpleDateFormat("mm:ss.SSS");
+        String formatted = sdf.format(new Date(elapsed));
+
+        this.game.getMessenger().message("Deine Zeit: §b" + formatted, player);
+        this.game.stop();
+      }
+      event.setCancelled(true);
     }
+  }
 }

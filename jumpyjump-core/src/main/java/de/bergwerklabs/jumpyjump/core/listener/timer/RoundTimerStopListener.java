@@ -10,21 +10,21 @@ import java.util.function.Consumer;
 
 /**
  * Created by Yannic Rieger on 05.04.2018.
+ *
  * <p>
  *
  * @author Yannic Rieger
  */
-public class RoundTimerStopListener extends JumpyJumpListener implements Consumer<LabsTimerStopEvent> {
+public class RoundTimerStopListener extends JumpyJumpListener
+    implements Consumer<LabsTimerStopEvent> {
 
-    private Collection<JumpyJumpPlayer> players;
+  private Collection<JumpyJumpPlayer> players;
 
-    public RoundTimerStopListener(JumpyJumpSession session) {
-        super(session);
-        this.players = this.session.getRegistry().getPlayers().values();
-    }
+  public RoundTimerStopListener(JumpyJumpSession session) {
+    super(session);
+    this.players = this.session.getRegistry().getPlayers().values();
+  }
 
-    @Override
-    public void accept(LabsTimerStopEvent labsTimerStopEvent) {
-
-    }
+  @Override
+  public void accept(LabsTimerStopEvent labsTimerStopEvent) {}
 }

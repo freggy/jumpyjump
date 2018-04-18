@@ -6,22 +6,21 @@ import org.bukkit.Location;
 
 /**
  * Created by Yannic Rieger on 03.04.2018.
- * <p>
- * This event will be fired when a player reaches a checkpoint.
+ *
+ * <p>This event will be fired when a player reaches a checkpoint.
  *
  * @author Yannic Rieger
  */
 public class CheckpointReachedEvent extends JumpyJumpEvent {
 
-    public Location getLocation() {
-        return location;
-    }
+  public Location getLocation() {
+    return location;
+  }
 
-    private Location location;
+  private Location location;
 
-    public CheckpointReachedEvent(JumpyJumpPlayer player, JumpyJumpMap map, Location location) {
-        super(player, map);
-        this.location = location;
-    }
-
+  public CheckpointReachedEvent(JumpyJumpPlayer player, JumpyJumpMap map, Location location) {
+    super(player, map);
+    this.location = location;
+  }
 }

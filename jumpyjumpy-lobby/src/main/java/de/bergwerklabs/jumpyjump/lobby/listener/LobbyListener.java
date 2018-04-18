@@ -6,17 +6,18 @@ import org.bukkit.event.Listener;
 
 /**
  * Created by Yannic Rieger on 06.04.2018.
+ *
  * <p>
  *
  * @author Yannic Rieger
  */
 public abstract class LobbyListener implements Listener {
 
-    protected Config config;
-    protected LobbyMapManager mapManager;
+  protected Config config;
+  protected LobbyMapManager mapManager;
 
-    public LobbyListener(Config config, LobbyMapManager mapManager) {
-        this.config = config;
-        this.mapManager = mapManager;
-    }
+  public LobbyListener(Config config, LobbyMapManager mapManager) {
+    this.config = config;
+    this.mapManager = mapManager;
+  }
 }
