@@ -9,12 +9,11 @@ import de.bergwerklabs.jumpyjump.core.Common;
 import de.bergwerklabs.jumpyjump.core.DisplayFailsTask;
 import de.bergwerklabs.jumpyjump.core.JumpyJumpSession;
 import de.bergwerklabs.jumpyjump.core.listener.JumpyJumpListener;
+import java.util.Collection;
+import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-
-import java.util.Collection;
-import java.util.function.Consumer;
 
 /**
  * Created by Yannic Rieger on 05.04.2018.

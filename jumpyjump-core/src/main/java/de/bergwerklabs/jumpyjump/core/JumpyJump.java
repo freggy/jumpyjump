@@ -13,16 +13,15 @@ import de.bergwerklabs.jumpyjump.core.listener.CancelListener;
 import de.bergwerklabs.jumpyjump.core.listener.PlayerInteractListener;
 import de.bergwerklabs.jumpyjump.core.listener.PlayerMoveListener;
 import de.bergwerklabs.jumpyjump.core.listener.timer.CountdownStopListener;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Yannic Rieger on 02.04.2018.
@@ -130,8 +129,7 @@ public class JumpyJump extends LabsGame<JumpyJumpPlayer> {
             JumpyJumpSession.getInstance(),
             () -> {
               this.playerRegistry
-                  .getPlayers()
-                  .values()
+                  .getPlayerCollection()
                   .stream()
                   .filter(p -> p.getPlayer() != null)
                   .forEach(
